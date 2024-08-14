@@ -38,7 +38,6 @@ export class SocketManager {
         token: authToken,
       },
     });
-
     this.setupEventListeners();
   }
 

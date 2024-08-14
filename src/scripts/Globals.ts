@@ -8,25 +8,30 @@ import { SocketManager } from "../socket";
 type globalDataType = {
   resources: { [key: string]:  Phaser.Textures.Texture }
   emitter: MyEmitter | undefined;
-//   isMobile: boolean;
+  isMobile: boolean;
   fpsStats : Stats ,
   soundResources: { [key: string]: Howl };
 
   App: App | undefined;
   Socket : SocketManager | undefined,
+  PhaserInstance: Phaser.Game | undefined;
 }
 
 export const Globals: globalDataType = {
  resources: { },
   emitter: undefined,
-//   get isMobile() {
-//     //  return true;
-//     return this.sys.device.os.android || this.sys.device.os.iOS || this.gameConfig.device.os.windowsPhone;
-//   },
+  get isMobile() {
+    if (!this.PhaserInstance) {
+      return false; // Default to false if PhaserInstance is not set
+    }
+    const device = this.PhaserInstance.device;
+    return device.os.android || device.os.iOS;
+  },
   fpsStats: new Stats(),
   App: undefined,
   Socket: undefined,
   soundResources: {},
+  PhaserInstance: undefined
 };
 
 

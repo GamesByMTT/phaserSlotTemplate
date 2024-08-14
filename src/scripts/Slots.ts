@@ -17,7 +17,6 @@ export class Slots extends Phaser.GameObjects.Container {
     private symbolHeight: number;
     private spacingX: number;
     private spacingY: number;
-
     
     constructor(scene: Phaser.Scene, callback: () => void) {
         super(scene);
@@ -107,28 +106,35 @@ export class Slots extends Phaser.GameObjects.Container {
     }
 
     stopTween() {
+        // Calculate the maximum delay for endTween
+        const maxDelay = 200 * (this.slotSymbols.length - 1);
+    
+        // Use a single timeout for resultCallBack, ensuring it's called only once after all endTweens
+        setTimeout(() => {
+            // Call resultCallBack after all endTween calls
+            this.resultCallBack();
+            this.moveSlots = false;
+            ResultData.gameData.symbolsToEmit.forEach((rowArray: any) => {
+                rowArray.forEach((row: any) => {
+                    if (typeof row === "string") {
+                        const [y, x]: number[] = row.split(",").map((value) => parseInt(value)); // Swap x and y here
+                        const animationId = `symbol_anim_${ResultData.gameData.ResultReel[x][y]}`;
+                        if (this.slotSymbols[y] && this.slotSymbols[y][x]) { // Correct access based on swapped x and y
+                            // Debuging the Symbol                            
+                            this.slotSymbols[y][x].playAnimation(animationId);    
+                        } 
+                    }
+                });
+            });
+            
+        }, maxDelay + 200); // Ensure the resultCallBack is called after the last endTween
+    
+        // Call endTween for each symbol with appropriate delay
         for (let i = 0; i < this.slotSymbols.length; i++) {
             for (let j = 0; j < this.slotSymbols[i].length; j++) {
                 setTimeout(() => {
                     this.slotSymbols[i][j].endTween();
                 }, 200 * i);
-            }
-            if (i === this.slotSymbols.length - 1) {
-                setTimeout(() => {
-                    this.resultCallBack();
-                    this.moveSlots = false;
-                    ResultData.gameData.symbolsToEmit.forEach((rowArray: any) => {
-                        rowArray.forEach((row: any) => {
-                            if (typeof row === "string") {
-                                const [x, y]: number[] = row
-                                    .split(",")
-                                    .map((value) => parseInt(value));
-                                    const animationId = `symbol_anim_${ResultData.gameData.ResultReel[2 - y][x]}`
-                                    this.slotSymbols[x][2 - y].playAnimation(animationId);
-                            }
-                        });
-                    });
-                }, 1000);
             }
         }
     }
@@ -187,6 +193,7 @@ class SlotSymbolSprite {
         }
     }
 }
+// @Sybols CLass
 
 class Symbols {
     symbol: Phaser.GameObjects.Sprite;
@@ -199,7 +206,8 @@ class Symbols {
     constructor(scene: Phaser.Scene, symbolKey: string, index: { x: number; y: number }) {
         this.scene = scene;
         this.index = index;
-        this.symbol = new Phaser.GameObjects.Sprite(scene, 0, 0, symbolKey);
+        const updatedSymbolKey = this.updateKeyToZero(symbolKey)
+        this.symbol = new Phaser.GameObjects.Sprite(scene, 0, 0, updatedSymbolKey);
         this.symbol.setOrigin(0.5, 0.5);
 
         // Load textures and create animation
@@ -211,62 +219,58 @@ class Symbols {
         this.scene.anims.create({
             key: `${symbolKey}`,
             frames: textures.map((texture) => ({ key: texture })),
-            frameRate: 10,
+            frameRate: 20,
             repeat: -1,
         });
     }
+    // to update the slotx_0 to show the 0 index image at the end
+    updateKeyToZero(symbolKey: string): string {
+        const match = symbolKey.match(/^slots(\d+)_\d+$/);
+        if (match) {
+            const xValue = match[1];
+            return `slots${xValue}_0`;
+        } else {
+            return symbolKey; // Return the original key if format is incorrect
+        }
+    }
     playAnimation(animationId: any) {
-
-        console.log(animationId);
         this.symbol.play(animationId)
-        // this.symbol.play(`${this.symbol.texture.key}`);
-      }
+    }
       stopAnimation() {
-        // this.symbol.gotoAndStop(0);
         this.symbol.anims.stop();
         this.symbol.setFrame(0);
       }
       endTween() {
         if (this.index.y < 3) {
             let textureKeys: string[] = [];
-    
             // Retrieve the elementId based on index
-            const elementId = ResultData.gameData.ResultReel[2 - this.index.y][this.index.x];
-            
-            // Generate texture keys based on the elementId
-            for (let i = 0; i < 23; i++) {
-                const textureKey = `slots${elementId}_${i}`;
-                // Check if the texture exists in cache
-                if (this.scene.textures.exists(textureKey)) {
-                    textureKeys.push(textureKey);
-                } else {
-                    console.error(`Texture ${textureKey} not found`);
+            const elementId = ResultData.gameData.ResultReel[this.index.y][this.index.x];
+                for (let i = 0; i < 23; i++) {
+                    const textureKey = `slots${elementId}_${i}`;
+                    // Check if the texture exists in cache
+                    if (this.scene.textures.exists(textureKey)) {
+                        textureKeys.push(textureKey);
+                    } 
                 }
-            }
-    
-            // Check if we have texture keys to set
-            if (textureKeys.length > 0) {
-                // Create animation with the collected texture keys
-                this.scene.anims.create({
-                    key: `symbol_anim_${elementId}`,
-                    frames: textureKeys.map(key => ({ key })),
-                    frameRate: 10,
-                    repeat: -1
-                });
-                // Set the texture to the first key and start the animation
-                this.symbol.setTexture(textureKeys[0]);
-                console.log(`symbol_anim_${elementId}`);
-                
-                // this.symbol.play(`symbol_anim_${elementId}`);
-            }
+                // Check if we have texture keys to set
+                    if (textureKeys.length > 0) {
+                    // Create animation with the collected texture keys
+                        this.scene.anims.create({
+                            key: `symbol_anim_${elementId}`,
+                            frames: textureKeys.map(key => ({ key })),
+                            frameRate: 15,
+                            repeat: -1
+                        });
+                    // Set the texture to the first key and start the animation
+                        this.symbol.setTexture(textureKeys[0]);               
+                    }
         }
-    
         // Stop moving and start tweening the sprite's position
         this.startMoving = false;
         this.scene.tweens.add({
             targets: this.symbol,
             y: this.startY,
-            duration: 400,
+            duration: 300,
             ease: 'Elastic.easeOut',
             repeat: 0,
             onComplete: () => {
@@ -276,15 +280,23 @@ class Symbols {
     }
     
       update(dt: number) {
+        console.log(Globals.isMobile, "Globals.isMobileGlobals.isMobile");
+        
         if (this.startMoving) {
           const deltaY = 10 * dt;
-          const newY = this.symbol.y + deltaY;
-
+          const newY = this.symbol.y + deltaY;  
           this.symbol.y = newY; 
         // Check if newY exceeds the maximum value
         if (newY >= window.innerHeight*1.2) {
             this.symbol.y = 100; // Reset to 0 if it exceeds maxY
         } 
     }
+    // I have to check this for Mobile Rotation purpose
+    // if (this.startMoving) {
+    //     const deltaY = 80 * dt;
+    //     const newY = this.symbol.y + deltaY;
+    //     // Clamp the new Y position to prevent excessive movement
+    //     this.symbol.y = Math.max(newY, this.symbol.y);
+    //   }
 }
 }

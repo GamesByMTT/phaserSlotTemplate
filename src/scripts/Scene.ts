@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import Background from './Background';
 import { gameConfig } from './appconfig';
 import { Globals } from './Globals';
-import { staticData } from './LoaderConfig';
+
 
 export abstract class Scene extends Phaser.Scene {
     private sceneContainer: Phaser.GameObjects.Container;
@@ -15,9 +15,6 @@ export abstract class Scene extends Phaser.Scene {
         this.mainContainer = this.add.container();
 
         // Initialize background
-        // this.mainBackground = new Background(this, 0, 0, staticData.Background);
-        // this.addChildToFullScene(this.mainBackground);
-
         this.resetMainContainer();
         this.sceneContainer.add(this.mainContainer);
     }

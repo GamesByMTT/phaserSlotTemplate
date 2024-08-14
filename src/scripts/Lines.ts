@@ -26,7 +26,7 @@ export class LineGenerator extends Phaser.GameObjects.Container {
     }
 
     showLines(lines: number[]) {
-        console.log("Showing lines", lines);
+        // console.log("Showing lines", lines);
         
         lines.forEach(lineIndex => {
             if (lineIndex >= 0 && lineIndex < this.lineArr.length) {
@@ -63,7 +63,7 @@ export class Lines extends Phaser.GameObjects.Graphics {
             lastPosY = yOffset * initData.gameData.Lines[index][i];
         }
         this.strokePath();
-        console.log(lastPosX, lastPosY, "lastPosXlastPosX");
+        // console.log(lastPosX, lastPosY, "lastPosXlastPosX");
         
         // Add this Graphics object to the scene
         scene.add.existing(this);

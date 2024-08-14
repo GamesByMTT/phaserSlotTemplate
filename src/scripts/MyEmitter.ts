@@ -9,8 +9,6 @@ export default class MyEmitter {
     Call(msgType: string, msgParams = {}) {
         if (msgType != "timer" && msgType != "turnTimer")
             // console.log(`Emitter Called : ${msgType}`);
-        
-        this.mainscene.recievedMessage(msgType, msgParams);
-            // MainScene.recievedMessage(msgType, msgParams);
+            this.mainscene.recievedMessage(msgType, msgParams);
     }
 }

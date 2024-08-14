@@ -1,37 +1,64 @@
-const {merge} = require("webpack-merge");
-const path = require("path");
-const base = require("./base");
-const TerserPlugin = require("terser-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-module.exports = merge(base, {
-  mode: "production",
+module.exports = {
+  entry: './src/scripts/index.ts',
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: '[name].bundle.min.js',
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, './dist'),
   },
-  devtool: false,
-  performance: {
-    maxEntrypointSize: 900000,
-    maxAssetSize: 900000
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      assets: path.resolve(__dirname, 'src/sprites'),
+    },
   },
-  optimization: {
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          output: {
-            comments: false
-          }
-        }
-      })
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[hash].[ext]',
+              outputPath: 'images',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[hash].[ext]',
+              outputPath: 'fonts',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(frag|vert)$/,
+        use: 'raw-loader',
+      },
     ],
-    splitChunks : {
-       cacheGroups: {
-        venders : {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all'
-        }
-       }
-      }
-    }
-});
+  },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: './index.html',
+    }),
+  ],
+};

@@ -6,12 +6,11 @@ const TerserPlugin = require("terser-webpack-plugin");
 const webpack = require("webpack");
 
 const line = "---------------------------------------------------------";
-const msg = `❤️❤️❤️ Tell us about your game! - games@phaser.io ❤️❤️❤️`;
+const msg = `Gold of Egypt Slot Game`;
 process.stdout.write(`${line}\n${msg}\n${line}\n`);
-
 module.exports = {
     mode: "production",
-    entry: "./src/main.ts",
+    entry: "./src/scripts/index.ts",
     output: {
         path: path.resolve(process.cwd(), 'dist'),
         filename: "./bundle.min.js"
@@ -27,17 +26,40 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: "babel-loader"
+                  loader: "babel-loader"
                 }
-            },
-            {
+              },
+              { test: /\.tsx?$/, loader: 'ts-loader' },
+              {
                 test: [/\.vert$/, /\.frag$/],
                 use: "raw-loader"
-            },
-            {
-                test: /\.(gif|png|jpe?g|svg|xml|glsl)$/i,
-                use: "file-loader"
-            }
+              },
+              {
+                test: /\.(gif|png|mp3|jpe?g|svg|xml)$/i,
+                use: {
+                  loader: "file-loader",
+                  options: {
+                    name: "[name].[ext]",
+                    outputPath: "src/sprites",
+                    publicPath: "src/sprites"
+                  }
+                }
+              }, {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+              },
+              {
+                test: /\.ttf$/,
+                use: [
+                  {
+                    loader: 'ttf-loader',
+                    options: {
+                      name: './fonts/[hash].[ext]',
+                    },
+                  }
+                ]
+              }
+                   
         ]
     },
     optimization: {
@@ -71,7 +93,7 @@ module.exports = {
         }),
         new CopyPlugin({
             patterns: [
-                { from: 'public/assets', to: 'assets' },
+                { from: 'public/src/sprites', to: 'src/sprites' },
                 { from: 'public/favicon.png', to: 'favicon.png' },
                 { from: 'public/style.css', to: 'style.css' }
             ],

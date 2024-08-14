@@ -35,7 +35,7 @@ export class UiContainer extends Phaser.GameObjects.Container {
         linePanel.setOrigin(0.5);
         linePanel.setPosition(gameConfig.scale.width/9, gameConfig.scale.height - 80);
         const container = this.scene.add.container(gameConfig.scale.width/8, gameConfig.scale.height - 80);
-        const lineText = new TextLabel(this.scene, 0, -70, "LINES", 30, "#ffffff");
+        const lineText = new TextLabel(this.scene, -20, -70, "LINES", 30, "#3C2625");
         container.add(lineText)
         const pBtn = this.createButton('pBtn', 100, 0, () => {
             if (!currentGameData.isMoving) {
@@ -73,7 +73,7 @@ export class UiContainer extends Phaser.GameObjects.Container {
         const winPanel = this.scene.add.sprite(0, 0, 'winPanel');
         winPanel.setOrigin(0.5);
         winPanel.setPosition(gameConfig.scale.width / 1.15, this.spinBtn.y);
-        const winPanelText = new TextLabel(this.scene, 0, -70, "WON", 30, "#ffffff");
+        const winPanelText = new TextLabel(this.scene, 0, -70, "WON", 30, "#3C2625");
         const container = this.scene.add.container(gameConfig.scale.width / 1.15, this.spinBtn.y)
         container.add(winPanelText);
         const currentWining: any = ResultData.playerData.currentWining;
@@ -87,7 +87,7 @@ export class UiContainer extends Phaser.GameObjects.Container {
         const balancePanel = this.scene.add.sprite(0, 0, 'balancePanel');
         balancePanel.setOrigin(0.5);
         balancePanel.setPosition(gameConfig.scale.width / 2 + balancePanel.width * 1.35, this.spinBtn.y);
-        const balancePanelText = new TextLabel(this.scene, 0, -70, "BALANCE", 30, "#ffffff");
+        const balancePanelText = new TextLabel(this.scene, 0, -70, "BALANCE", 30, "#3C2625");
 
         const container = this.scene.add.container(balancePanel.x, balancePanel.y);
         // container.add(balancePanel);
@@ -131,8 +131,6 @@ export class UiContainer extends Phaser.GameObjects.Container {
     }
 
     spinBtnInit(spinCallBack: () => void) {
-        console.error("spinCallBackspinCallBack");
-        
         // this.spinBtn = this.scene.add.sprite(0, 0, "spinBtn");
         this.spinBtn = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "spinBtn")
         this.spinBtn = this.createButton('spinBtn', gameConfig.scale.width / 2, gameConfig.scale.height - this.spinBtn.height / 2, () => {
@@ -145,14 +143,15 @@ export class UiContainer extends Phaser.GameObjects.Container {
         }).setDepth(10);
    
     }
-   
+
+    
     BetBtnInit() {
         // this.spinBtn = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "spinBtn")
         const betPanel = this.scene.add.sprite(1000, gameConfig.scale.height - 100, 'BetPanel').setDepth(10);
         betPanel.setOrigin(0.5);
         betPanel.setPosition( gameConfig.scale.width/3.7, gameConfig.scale.height - 80);
 
-        const betPanelText = new TextLabel(this.scene, 0, -70, "TOTAL BET", 30, "#ffffff");
+        const betPanelText = new TextLabel(this.scene, 0, -70, "TOTAL BET", 30, "#3C2625");
 
         const container = this.scene.add.container(gameConfig.scale.width/3.7, gameConfig.scale.height - 80);
         // container.add(betPanel);

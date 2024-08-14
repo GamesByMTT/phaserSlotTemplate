@@ -22,21 +22,25 @@ export default class MainScene extends Scene {
         // Load assets
         this.load.image('frame', 'src/sprites/SlotMachine_3x5.png');
         this.load.image('Background', 'src/sprites/Background.png'); // Load background image
-        // Load any other assets if required
     }
-
     create() {
         // Set up the background
         const { width, height } = this.cameras.main;
-        // this.add.image(width / 2, height / 2, 'Background').setOrigin(0.5).setDisplaySize(width, height);
+        this.add.image(width / 2, height / 2, 'Background').setOrigin(0.5).setDisplaySize(width, height);
 
         // Initialize main container
         this.mainContainer = this.add.container();
 
         // Set up the slot frame
-        // this.slotFrame = new Phaser.GameObjects.Sprite(this, width / 2, height / 2, 'frame')
-        // this.slotFrame = this.add.sprite(width / 2, height / 2, 'frame').setOrigin(0.5);
-        // this.mainContainer.add(this.slotFrame);
+        this.slotFrame = new Phaser.GameObjects.Sprite(this, width / 2, height / 2, 'frame')
+        this.slotFrame = this.add.sprite(width / 2, height / 2, 'frame').setOrigin(0.5);
+        this.mainContainer.add(this.slotFrame);
+
+        // Initialize Line Generator
+        setTimeout(() => {
+            this.lineGenerator = new LineGenerator(this, this.slot.slotSymbols[0][0].symbol.height, this.slot.slotSymbols[0][0].symbol.width);
+            this.mainContainer.add(this.lineGenerator);
+        }, 2000);
 
         // Initialize UI Container
         this.uiContainer = new UiContainer(this, () => this.onSpinCallBack());
@@ -46,15 +50,26 @@ export default class MainScene extends Scene {
         this.slot = new Slots(this, () => this.onResultCallBack());
         this.mainContainer.add(this.slot);
 
-        // Initialize Line Generator
-        setTimeout(() => {
-            this.lineGenerator = new LineGenerator(this, this.slot.slotSymbols[0][0].symbol.height, this.slot.slotSymbols[0][0].symbol.width);
-            this.mainContainer.add(this.lineGenerator);
-        }, 2000);
-        
-
         // Initialize UI Popups
         // this.uiPopups = new UiPopups(this);
+
+        // Update Globals.isMobile based on the device type
+        if (Globals.PhaserInstance) {
+            Globals.isMobile = Globals.PhaserInstance.device.os.android || Globals.PhaserInstance.device.os.iOS 
+        }
+
+        if (!this.sys.game.device.os.desktop) {
+            // Add event listener for click or touch to trigger fullscreen
+            this.input.on('pointerdown', async () => {
+                if (!this.scale.isFullscreen) {
+                    try {
+                        await this.scale.startFullscreen();
+                    } catch (error) {
+                        console.error('Failed to enter fullscreen mode:', error);
+                    }
+                }
+            });
+        }
 
     }
 

@@ -20,10 +20,7 @@ export class TextLabel extends GameObjects.Text {
     }
 
     updateLabelText(text: string) {
-        console.log(text, "text");
-        
         this.setText(text);
-        // Optionally, update color or other styles here if needed
     }
 
     setTextColor(color: string) {

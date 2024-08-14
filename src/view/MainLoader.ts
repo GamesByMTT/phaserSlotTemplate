@@ -1,6 +1,6 @@
 import { Scene, GameObjects } from "phaser";
 import MainScene from "./MainScene";
-import { LoaderConfig, staticData } from "../scripts/LoaderConfig";
+import { LoaderConfig } from "../scripts/LoaderConfig";
 import { Globals } from "../scripts/Globals";
 import { SocketManager } from "../socket";
 import MyEmitter from "../scripts/MyEmitter";
@@ -17,9 +17,6 @@ export default class MainLoader extends Scene {
     }
 
     preload() {
-        // Load the background image first
-        this.load.image("Background", "static/Background.png");
-        // this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, "Background").setOrigin(0.5);
 
         this.progressBox = this.add.graphics();
         this.progressBar = this.add.graphics();
@@ -27,7 +24,20 @@ export default class MainLoader extends Scene {
         this.load.on('progress', (value: number) => {
             this.updateProgressBar(value);
         });
+        this.socketManager = new SocketManager(() => {
+            // Callback for when InitData is received
+            this.onInitDataReceived();
+        });
 
+        Globals.Socket = this.socketManager; // Assign the actual SocketManager instance
+
+        this.socketManager.authenticate().then(() => {
+            // Authentication successful, start the main scene
+            this.scene.start("MainScene");
+        }).catch((error) => {
+            // Authentication failed, handle the error (e.g., show an error message)
+            console.error("Authentication failed:", error);
+        });
         this.load.on('complete', () => {
             if (this.progressBox) {
                 this.progressBox.destroy();
@@ -39,24 +49,7 @@ export default class MainLoader extends Scene {
             const loadedTextures = this.textures.list;
             Globals.resources = { ...loadedTextures };
 
-            // added MyEmiter into Globals.emitter to emit event
-            // Globals.emitter = new MyEmitter();
-
             // Initialize the socket manager and authenticate
-            this.socketManager = new SocketManager(() => {
-                // Callback for when InitData is received
-                this.onInitDataReceived();
-            });
-
-            Globals.Socket = this.socketManager; // Assign the actual SocketManager instance
-
-            this.socketManager.authenticate().then(() => {
-                // Authentication successful, start the main scene
-                this.scene.start("MainScene");
-            }).catch((error) => {
-                // Authentication failed, handle the error (e.g., show an error message)
-                console.error("Authentication failed:", error);
-            });
         });
 
         // Load all assets from LoaderConfig

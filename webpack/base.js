@@ -58,12 +58,15 @@ module.exports = {
     extensions: [".*",".js",".jsx",".ts",".tsx"],
     alias:{
       assets: path.join(__dirname, 'src/sprites')
-    }
+    },
+    
+    
   },
   plugins: [
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [path.join(__dirname, "dist/**/*")]
   }),
+  
   new webpack.DefinePlugin({
     "typeof CANVAS_RENDERER": JSON.stringify(true),
     "typeof WEBGL_RENDERER": JSON.stringify(true),
