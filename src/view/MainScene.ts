@@ -45,18 +45,12 @@ export default class MainScene extends Scene {
         // Initialize UI Container
         this.uiContainer = new UiContainer(this, () => this.onSpinCallBack());
         this.mainContainer.add(this.uiContainer);
-
         // Initialize Slots
         this.slot = new Slots(this, () => this.onResultCallBack());
         this.mainContainer.add(this.slot);
 
         // Initialize UI Popups
         // this.uiPopups = new UiPopups(this);
-
-        // Update Globals.isMobile based on the device type
-        if (Globals.PhaserInstance) {
-            Globals.isMobile = Globals.PhaserInstance.device.os.android || Globals.PhaserInstance.device.os.iOS 
-        }
 
         if (!this.sys.game.device.os.desktop) {
             // Add event listener for click or touch to trigger fullscreen
@@ -79,7 +73,7 @@ export default class MainScene extends Scene {
     }
 
     onResultCallBack() {
-        this.uiContainer.onSpin(false);
+        // this.uiContainer.onSpin(false);
         this.lineGenerator.showLines(ResultData.gameData.linesToEmit);
     }
 
@@ -94,7 +88,7 @@ export default class MainScene extends Scene {
             this.time.delayedCall(1000, () => {
                 this.uiContainer.currentWiningText.updateLabelText(ResultData.playerData.currentWining.toString());
                 currentGameData.currentBalance = ResultData.playerData.Balance;
-                this.uiContainer.currentBalanceText.updateLabelText(currentGameData.currentBalance.toString());
+                this.uiContainer.currentBalanceText.updateLabelText(currentGameData.currentBalance.toFixed(2));
                 this.slot.stopTween();
             });
         }

@@ -1,15 +1,19 @@
 import { Scene, GameObjects } from 'phaser';
+import {TextStyle as globalTextStyle} from './Globals'
 
 export class TextLabel extends GameObjects.Text {
     defaultColor: string;
 
-    constructor(scene: Scene, x: number, y: number, textToShow: string, size: number, defaultColor: string = '#ff7f50', font: string = 'Inter') {
-        super(scene, x, y, textToShow, {
+    constructor(scene: Scene, x: number, y: number, textToShow: string, size: number, defaultColor: string = '#ffffff', font: string = 'Inter') {
+        const style = {
+            ...globalTextStyle,
             fontFamily: font,
             fontSize: `${size}px`,
-            color: defaultColor
-        });
-
+            color: defaultColor,
+            fill: defaultColor,
+        };
+        super(scene, x, y, textToShow, style);
+    
         this.defaultColor = defaultColor;
 
         // Set the anchor
@@ -20,6 +24,7 @@ export class TextLabel extends GameObjects.Text {
     }
 
     updateLabelText(text: string) {
+        console.log("text", text);
         this.setText(text);
     }
 

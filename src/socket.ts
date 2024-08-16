@@ -16,7 +16,7 @@ function getToken() {
 let token = getToken();
 if(token!== null) {
   console.log("Token:", token);
-} else {
+} else {''
   console.log("Token not found");
 }
 
@@ -32,10 +32,11 @@ export class SocketManager {
     } else {
       console.log("Token not found");
     }
-   let  authToken = token || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2Yjc1YWFmN2EyZWEwYTUxNDdkOTQwOSIsInVzZXJuYW1lIjoicmFodWx0ZXN0Iiwicm9sZSI6InBsYXllciIsImlhdCI6MTcyMzQ0MDQzNywiZXhwIjoxNzI0MDQ1MjM3fQ.0Fh2BobcfEBmT_HzEuLhFkdiwkT5CiLqQd4aSk5h3rc";
+   let  authToken = token || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmIwN2Q4N2EyZWEwYTUxNDdkYjhkOSIsInVzZXJuYW1lIjoidmFpYmhhdiIsInJvbGUiOiJwbGF5ZXIiLCJpYXQiOjE3MjM4MDY0MDcsImV4cCI6MTcyNDQxMTIwN30.tpvjsTXoE3rWRUWCZ8QpZoqayzOId9T4miU8D8tm9lk";
     this.socket = io(socketUrl, {
       auth: {
         token: authToken,
+        // gameId: "SL-VIK",
       },
     });
     this.setupEventListeners();
@@ -62,19 +63,18 @@ export class SocketManager {
       this.socket.on("message", (message) => {
         const data = JSON.parse(message);
         // console.log(`Message ID : ${data.id} |||||| Message Data : ${JSON.stringify(data.message)}`);
-        if(data.id == "InitData")
-          {
+        if(data.id == "InitData") {
             this.onInitDataReceived();
             initData.gameData = data.message.GameData;
             initData.playerData = data.message.PlayerData;
-            // console.log(initData);
-          }
-          if(data.id == "ResultData")
-            {
+            console.log(data, "initData on Socket File");
+        }
+        if(data.id == "ResultData"){
               ResultData.gameData = data.message.GameData;
+              ResultData.playerData = data.message.PlayerData;
               Globals.emitter?.Call("ResultData");
               console.log(ResultData);
-            }
+        }
       });
     });
 
@@ -82,10 +82,7 @@ export class SocketManager {
       console.log(errorMessage);
     });
   }
-
-
  // Add this method to the SocketManager class in socket.ts
-
 authenticate(): Promise<void> {
     return new Promise((resolve, reject) => {
         this.socket.on("connect", () => {
@@ -108,6 +105,7 @@ authenticate(): Promise<void> {
     // console.log(message, "Scoket message testing");
   }
   sendMessage(id : string, message: any) {
+    console.log(message, "sending message");
     this.socket.emit(
       "message",
       JSON.stringify({ id: id, data: message })

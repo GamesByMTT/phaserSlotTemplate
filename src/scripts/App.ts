@@ -1,14 +1,7 @@
 import Phaser from 'phaser';
 import { CalculateScaleFactor, gameConfig } from './appconfig';
-// import { LoaderConfig } from './LoaderConfig'; // Assuming you have a LoaderConfig for asset loading
-import  MyEmitter  from './MyEmitter';
-import SceneManager from './SceneManager';
-import  MainScene  from '../view/MainScene';
 import { UiContainer } from './UiContainer';
 import MainLoader from '../view/MainLoader';
-import { SocketManager } from '../socket';
-import { Globals } from './Globals';
-// import { Socekt } from '../socket';
 
 // Global variables or constants
 const BASE_WIDTH = 1920;
@@ -16,7 +9,6 @@ const BASE_HEIGHT = 1080;
 
 export class App {
     game: Phaser.Game;
-    // emitter: MyEmitter;
 
     constructor() {
         // Initialize Phaser game
@@ -38,20 +30,10 @@ export class App {
                 }
             }
         });
-
         // Handle window resize
         window.addEventListener('resize', this.onResize.bind(this));
-
-        // Set up custom events
-        // this.emitter = new MyEmitter();
-    
-
-        // Initialize SceneManager
-      
-        new SceneManager();
-
         // Start the initial scene
-        this.startScene();
+        this.startScene()
     }
 
     onResize() {

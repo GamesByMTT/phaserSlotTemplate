@@ -28,16 +28,8 @@ export default class MainLoader extends Scene {
             // Callback for when InitData is received
             this.onInitDataReceived();
         });
-
         Globals.Socket = this.socketManager; // Assign the actual SocketManager instance
 
-        this.socketManager.authenticate().then(() => {
-            // Authentication successful, start the main scene
-            this.scene.start("MainScene");
-        }).catch((error) => {
-            // Authentication failed, handle the error (e.g., show an error message)
-            console.error("Authentication failed:", error);
-        });
         this.load.on('complete', () => {
             if (this.progressBox) {
                 this.progressBox.destroy();

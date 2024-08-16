@@ -17,7 +17,9 @@ export class Slots extends Phaser.GameObjects.Container {
     private symbolHeight: number;
     private spacingX: number;
     private spacingY: number;
+    private reelContainers: Phaser.GameObjects.Container[] = [];
     
+
     constructor(scene: Phaser.Scene, callback: () => void) {
         super(scene);
 
@@ -48,8 +50,9 @@ export class Slots extends Phaser.GameObjects.Container {
             x: gameConfig.scale.width / 4 + 52,
             y: gameConfig.scale.height / 4 + 35       
         };
-        
         for (let i = 0; i < 5; i++) { // 5 columns
+            const reelContainer = new Phaser.GameObjects.Container(scene);
+            this.reelContainers.push(reelContainer); // Store the container for future use
             
             this.slotSymbols[i] = [];
             for (let j = 0; j < 3; j++) { // 3 rows
@@ -64,9 +67,11 @@ export class Slots extends Phaser.GameObjects.Container {
                 slot.startX = slot.symbol.x;
                 slot.startY = slot.symbol.y;
                 this.slotSymbols[i].push(slot);
-                
-                this.add(slot.symbol);
+                // this.add(slot.symbol);
+                reelContainer.add(slot.symbol)
             }
+            console.log("reelContainer", reelContainer);
+            this.add(reelContainer);
         }
     }
 
@@ -202,6 +207,7 @@ class Symbols {
     startMoving: boolean = false;
     index: { x: number; y: number };
     scene: Phaser.Scene;
+    private isMobile: boolean;
 
     constructor(scene: Phaser.Scene, symbolKey: string, index: { x: number; y: number }) {
         this.scene = scene;
@@ -209,7 +215,7 @@ class Symbols {
         const updatedSymbolKey = this.updateKeyToZero(symbolKey)
         this.symbol = new Phaser.GameObjects.Sprite(scene, 0, 0, updatedSymbolKey);
         this.symbol.setOrigin(0.5, 0.5);
-
+        this.isMobile = scene.sys.game.device.os.android || scene.sys.game.device.os.iOS;
         // Load textures and create animation
         const textures: string[] = [];
         Globals.resources
@@ -280,23 +286,15 @@ class Symbols {
     }
     
       update(dt: number) {
-        console.log(Globals.isMobile, "Globals.isMobileGlobals.isMobile");
         
         if (this.startMoving) {
           const deltaY = 10 * dt;
           const newY = this.symbol.y + deltaY;  
           this.symbol.y = newY; 
         // Check if newY exceeds the maximum value
-        if (newY >= window.innerHeight*1.2) {
+        if (newY >= (this.isMobile ? window.innerHeight * 2 : window.innerHeight * 1.2)) {
             this.symbol.y = 100; // Reset to 0 if it exceeds maxY
         } 
     }
-    // I have to check this for Mobile Rotation purpose
-    // if (this.startMoving) {
-    //     const deltaY = 80 * dt;
-    //     const newY = this.symbol.y + deltaY;
-    //     // Clamp the new Y position to prevent excessive movement
-    //     this.symbol.y = Math.max(newY, this.symbol.y);
-    //   }
 }
 }

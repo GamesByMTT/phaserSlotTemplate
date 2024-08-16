@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import SceneManager from "./SceneManager";
 import MainScene from "../view/MainScene";
 export default class MyEmitter {
     private mainscene : MainScene;
