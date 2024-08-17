@@ -55,7 +55,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [".*",".js",".jsx",".ts",".tsx"],
+    extensions: [".*",".js",".jsx",".ts",".tsx", ".env"],
     alias:{
       assets: path.join(__dirname, 'src/sprites')
     },

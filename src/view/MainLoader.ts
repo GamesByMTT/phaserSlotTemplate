@@ -10,6 +10,7 @@ export default class MainLoader extends Scene {
     private progressBox: GameObjects.Graphics | null = null;
     private socketManager: SocketManager | null = null;
     private mainScene!: MainScene;
+    private socketDataReceived: boolean = false;
     constructor(config: Phaser.Types.Scenes.SettingsConfig) {
         super(config);
         this.resources = LoaderConfig;
@@ -68,12 +69,15 @@ export default class MainLoader extends Scene {
 
     create() {
         const {width, height} = this.cameras.main
-        this.add.image(width / 2, height / 2, 'Background').setOrigin(0.5).setDisplaySize(width, height);
-        // Additional setup if needed
-        this.scene.add("MainScene", MainScene, true);
-        this.mainScene = this.scene.get('MainScene') as MainScene;
-        // Create an instance of MyEmitter with the mainScene
-        Globals.emitter = new MyEmitter(this.mainScene);
+            this.add.image(width / 2, height / 2, 'Background').setOrigin(0.5).setDisplaySize(width, height);
+        setTimeout(() => {
+            // Additional setup if needed
+            this.scene.add("MainScene", MainScene, true);
+            this.mainScene = this.scene.get('MainScene') as MainScene;
+            // Create an instance of MyEmitter with the mainScene
+            Globals.emitter = new MyEmitter(this.mainScene);
+        }, 500);
+        
     }
 
     private onInitDataReceived() {

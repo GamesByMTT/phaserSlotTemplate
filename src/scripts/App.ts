@@ -32,7 +32,7 @@ export class App {
         });
         // Handle window resize
         window.addEventListener('resize', this.onResize.bind(this));
-        // Start the initial scene
+        // Start the initial scene;
         this.startScene()
     }
 
@@ -42,7 +42,6 @@ export class App {
     }
 
     startScene() {
-        // Assuming SceneManager handles the scene transitions
         this.game.scene.start('MainScene');
     }
 }

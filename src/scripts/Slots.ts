@@ -168,37 +168,7 @@ export class Slots extends Phaser.GameObjects.Container {
     }
 }
 
-class SlotSymbolSprite {
-    symbol: Phaser.GameObjects.Sprite;
-    startY: number = 0;
-    startMoving: boolean = false;
-    scene: Phaser.Scene;
-
-    constructor(scene: Phaser.Scene, elementId: number) {
-        this.scene = scene;
-        this.symbol = new Phaser.GameObjects.Sprite(scene, 0, 0, `slots${elementId}_0`);
-        this.symbol.setOrigin(0.5);
-    }
-
-    endTween() {
-        this.startMoving = false;
-        this.scene.tweens.add({
-            targets: this.symbol,
-            y: this.startY,
-            duration: 400,
-            ease: 'Elastic.Out',
-        });
-    }
-
-    update(delta: number) {
-        if (this.startMoving) {
-            const deltaY = 80 * delta;
-            this.symbol.y += deltaY;
-        }
-    }
-}
 // @Sybols CLass
-
 class Symbols {
     symbol: Phaser.GameObjects.Sprite;
     startY: number = 0;
@@ -275,7 +245,7 @@ class Symbols {
         this.scene.tweens.add({
             targets: this.symbol,
             y: this.startY,
-            duration: 300,
+            duration: 200,
             ease: 'Elastic.easeOut',
             repeat: 0,
             onComplete: () => {

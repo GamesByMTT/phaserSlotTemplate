@@ -38,6 +38,9 @@ export class SocketManager {
         token: authToken,
         // gameId: "SL-VIK",
       },
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000, // Initial delay between reconnection attempts (in ms)
+      reconnectionDelayMax: 5000,
     });
     this.setupEventListeners();
   }
