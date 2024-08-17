@@ -433,7 +433,7 @@ export const LoaderConfig = {
 export const staticData = {
     // logoURL: "https://cccdn.b-cdn.net/1584464368856.png",
     // logoURL:  "/static/logo.png").default,
-    Background:  "/static/Background.png",
+    // Background:  "/static/Background.png",
 };
 
 export const fontData = ["Montserrat"];

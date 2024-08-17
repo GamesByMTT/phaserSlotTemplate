@@ -4,7 +4,6 @@ import { UiContainer } from '../scripts/UiContainer';
 import { LineGenerator } from '../scripts/Lines';
 import { UiPopups } from '../scripts/UiPopup';
 import { Globals, ResultData, currentGameData } from '../scripts/Globals';
-import { gameConfig } from '../scripts/appconfig';
 
 export default class MainScene extends Scene {
     slot!: Slots;
@@ -20,14 +19,12 @@ export default class MainScene extends Scene {
 
     preload() {
         // Load assets
-        this.load.image('frame', 'src/sprites/SlotMachine_3x5.png');
-        this.load.image('Background', 'src/sprites/Background.png'); // Load background image
+             
     }
     create() {
         // Set up the background
         const { width, height } = this.cameras.main;
-        this.add.image(width / 2, height / 2, 'Background').setOrigin(0.5).setDisplaySize(width, height);
-
+      
         // Initialize main container
         this.mainContainer = this.add.container();
 
@@ -52,6 +49,7 @@ export default class MainScene extends Scene {
         // Initialize UI Popups
         // this.uiPopups = new UiPopups(this);
 
+        // for Mobile fullScreen onclick
         if (!this.sys.game.device.os.desktop) {
             // Add event listener for click or touch to trigger fullscreen
             this.input.on('pointerdown', async () => {
@@ -69,11 +67,11 @@ export default class MainScene extends Scene {
 
     update(time: number, delta: number) {
         this.slot.update(time, delta);
-        // Update other elements if needed
     }
 
     onResultCallBack() {
-        // this.uiContainer.onSpin(false);
+        // this.uiContainer.
+        this.uiContainer.onSpin(false);
         this.lineGenerator.showLines(ResultData.gameData.linesToEmit);
     }
 

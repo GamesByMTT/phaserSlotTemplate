@@ -21,7 +21,7 @@ if(token!== null) {
 }
 
 
-const socketUrl = "https://dev.casinoparadize.com/";
+const socketUrl = process.env.SOCKET_URL || ""
 export class SocketManager {
   private socket;
 

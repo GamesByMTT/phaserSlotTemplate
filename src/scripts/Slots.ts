@@ -70,7 +70,6 @@ export class Slots extends Phaser.GameObjects.Container {
                 // this.add(slot.symbol);
                 reelContainer.add(slot.symbol)
             }
-            console.log("reelContainer", reelContainer);
             this.add(reelContainer);
         }
     }

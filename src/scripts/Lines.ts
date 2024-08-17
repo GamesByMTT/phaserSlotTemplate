@@ -26,8 +26,7 @@ export class LineGenerator extends Phaser.GameObjects.Container {
     }
 
     showLines(lines: number[]) {
-        // console.log("Showing lines", lines);
-        
+
         lines.forEach(lineIndex => {
             if (lineIndex >= 0 && lineIndex < this.lineArr.length) {
                 this.lineArr[lineIndex].showLine();

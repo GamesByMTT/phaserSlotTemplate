@@ -22,9 +22,8 @@ export class TextLabel extends GameObjects.Text {
         // Add this text object to the scene
         scene.add.existing(this);
     }
-
+    
     updateLabelText(text: string) {
-        console.log("text", text);
         this.setText(text);
     }
 
