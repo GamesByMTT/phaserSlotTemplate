@@ -31,8 +31,6 @@ jspm_packages/
 # Misc
 .DS_Store
 *.pem
-*.env.local
-*.env.*.local
 .idea/
 .vscode/
 .vscode/*

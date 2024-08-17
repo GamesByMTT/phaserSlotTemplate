@@ -124,7 +124,7 @@ export class Slots extends Phaser.GameObjects.Container {
                         const [y, x]: number[] = row.split(",").map((value) => parseInt(value)); // Swap x and y here
                         const animationId = `symbol_anim_${ResultData.gameData.ResultReel[x][y]}`;
                         if (this.slotSymbols[y] && this.slotSymbols[y][x]) { // Correct access based on swapped x and y
-                            // Debuging the Symbol                            
+                            // Debuging the Symbol       
                             this.slotSymbols[y][x].playAnimation(animationId);    
                         } 
                     }
@@ -233,7 +233,7 @@ class Symbols {
                         this.scene.anims.create({
                             key: `symbol_anim_${elementId}`,
                             frames: textureKeys.map(key => ({ key })),
-                            frameRate: 15,
+                            frameRate: 20,
                             repeat: -1
                         });
                     // Set the texture to the first key and start the animation
@@ -245,7 +245,7 @@ class Symbols {
         this.scene.tweens.add({
             targets: this.symbol,
             y: this.startY,
-            duration: 200,
+            duration: 300,
             ease: 'Elastic.easeOut',
             repeat: 0,
             onComplete: () => {
