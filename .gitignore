@@ -9,7 +9,6 @@ npm-debug.log*
 # Directory for temporary files and project output
 tmp/
 temp/
-dist/
 
 # Compiled source
 *.class
