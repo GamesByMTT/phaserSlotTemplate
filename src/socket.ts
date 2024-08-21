@@ -13,7 +13,7 @@ function getToken() {
   return null;
 }
 let SocketUrl = "https://dev.casinoparadize.com/";
-let AuthToken = "";
+let AuthToken =  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzU4M2RkMWJkNzI4Zjg3YTM0ZWQ2OSIsInVzZXJuYW1lIjoiYXJwaXQiLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzI0MjIwNDA2LCJleHAiOjE3MjQ4MjUyMDZ9.z6SvMAQLF_CTI1WZdNfCWvxHFF91U8tjwsogLAOkEY4";
 
 
 function AuthVerify(callBack  : ()=>{})
@@ -40,7 +40,7 @@ function AuthVerify(callBack  : ()=>{})
 // }
 
 
-const socketUrl = process.env.SOCKET_URL || ""
+// const socketUrl = process.env.SOCKET_URL || ""
 export class SocketManager {
   private socket : any;
 
@@ -56,15 +56,15 @@ export class SocketManager {
     //   console.log("Token not found");
     // }
     AuthVerify(()=>this.setupSocket)
+    // this.setupSocket();
   
   }
   
   setupSocket()
   {
-    let  authToken = AuthToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzU4M2RkMWJkNzI4Zjg3YTM0ZWQ2OSIsInVzZXJuYW1lIjoiYXJwaXQiLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzI0MjIwNDA2LCJleHAiOjE3MjQ4MjUyMDZ9.z6SvMAQLF_CTI1WZdNfCWvxHFF91U8tjwsogLAOkEY4";
-    this.socket = io(socketUrl, {
+   this.socket = io(SocketUrl, {
       auth: {
-        token: authToken,
+        token: AuthToken,
         gameId: "SL-GOE",
       },
       reconnectionAttempts: 5,
