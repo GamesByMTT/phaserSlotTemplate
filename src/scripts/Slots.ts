@@ -1,13 +1,14 @@
 import Phaser from 'phaser';
 import { Globals, ResultData, initData } from "./Globals";
 import { gameConfig } from './appconfig';
-// import { symbols } from './LoaderConfig';
+import { UiContainer } from './UiContainer';
 import { Easing, Tween } from "@tweenjs/tween.js"; // If using TWEEN for animations
 
 export class Slots extends Phaser.GameObjects.Container {
     slotMask: Phaser.GameObjects.Graphics;
     slotSymbols: any[][] = [];
     moveSlots: boolean = false;
+    uiContainer!: UiContainer;
     resultCallBack: () => void;
     slotFrame!: Phaser.GameObjects.Sprite;
     private maskWidth: number;
@@ -20,10 +21,11 @@ export class Slots extends Phaser.GameObjects.Container {
     private reelContainers: Phaser.GameObjects.Container[] = [];
     
 
-    constructor(scene: Phaser.Scene, callback: () => void) {
+    constructor(scene: Phaser.Scene, uiContainer: UiContainer, callback: () => void) {
         super(scene);
 
         this.resultCallBack = callback;
+        this.uiContainer = uiContainer;
 
         this.slotMask = new Phaser.GameObjects.Graphics(scene);
         
@@ -106,13 +108,13 @@ export class Slots extends Phaser.GameObjects.Container {
                 }, 100 * i);
             }
         }
+        this.uiContainer.maxbetBtn.disableInteractive();
         this.moveSlots = true;
     }
 
     stopTween() {
         // Calculate the maximum delay for endTween
         const maxDelay = 200 * (this.slotSymbols.length - 1);
-    
         // Use a single timeout for resultCallBack, ensuring it's called only once after all endTweens
         setTimeout(() => {
             // Call resultCallBack after all endTween calls
@@ -125,12 +127,12 @@ export class Slots extends Phaser.GameObjects.Container {
                         const animationId = `symbol_anim_${ResultData.gameData.ResultReel[x][y]}`;
                         if (this.slotSymbols[y] && this.slotSymbols[y][x]) { // Correct access based on swapped x and y
                             // Debuging the Symbol       
-                            this.slotSymbols[y][x].playAnimation(animationId);    
+                            this.slotSymbols[y][x].playAnimation(animationId);   
+                             
                         } 
                     }
                 });
             });
-            
         }, maxDelay + 200); // Ensure the resultCallBack is called after the last endTween
     
         // Call endTween for each symbol with appropriate delay
@@ -141,6 +143,9 @@ export class Slots extends Phaser.GameObjects.Container {
                 }, 200 * i);
             }
         }
+        setTimeout(() => {
+            this.uiContainer.stopFireAnimation();       
+        }, maxDelay + 200);
     }
 
     update(time: number, delta: number) {

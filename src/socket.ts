@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
 import { Globals, ResultData, initData } from "./scripts/Globals";
+import { EventEmitter } from "stream";
 
 function getToken() {
   let cookieArr = document.cookie.split("; ");
@@ -11,32 +12,60 @@ function getToken() {
   }
   return null;
 }
+let SocketUrl = "https://dev.casinoparadize.com/";
+let AuthToken = "";
 
-// Usage example
-let token = getToken();
-if(token!== null) {
-  console.log("Token:", token);
-} else {''
-  console.log("Token not found");
+
+function AuthVerify(callBack  : ()=>{})
+{
+  window.addEventListener('message', (event) => {
+    if (event.data.type === 'authToken') 
+    {
+      SocketUrl = event.data.socketURL
+      AuthToken = event.data.cookie;
+      callBack();
+    }
+      
+
+});
 }
+
+
+// // Usage example
+// let token = getToken();
+// if(token!== null) {
+//   console.log("Token:", token);
+// } else {''
+//   console.log("Token not found");
+// }
 
 
 const socketUrl = process.env.SOCKET_URL || ""
 export class SocketManager {
-  private socket;
+  private socket : any;
 
-  constructor(private onInitDataReceived: () => void) { 
-    const token = getToken();
-    if(token!== null) {
-      console.log("Token:", token);
-    } else {
-      console.log("Token not found");
-    }
-   let  authToken = token || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmIwN2Q4N2EyZWEwYTUxNDdkYjhkOSIsInVzZXJuYW1lIjoidmFpYmhhdiIsInJvbGUiOiJwbGF5ZXIiLCJpYXQiOjE3MjM4MDY0MDcsImV4cCI6MTcyNDQxMTIwN30.tpvjsTXoE3rWRUWCZ8QpZoqayzOId9T4miU8D8tm9lk";
+  constructor(public onInitDataReceived: () => void) { 
+    // const token = getToken();
+    
+        // Initialize the socket connection now that we have the necessary data
+    //     this.initializeSocket();
+   
+    // if(token!== null) {
+    //   console.log("Token:", token);
+    // } else {
+    //   console.log("Token not found");
+    // }
+    AuthVerify(()=>this.setupSocket)
+  
+  }
+  
+  setupSocket()
+  {
+    let  authToken = AuthToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzU4M2RkMWJkNzI4Zjg3YTM0ZWQ2OSIsInVzZXJuYW1lIjoiYXJwaXQiLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzI0MjIwNDA2LCJleHAiOjE3MjQ4MjUyMDZ9.z6SvMAQLF_CTI1WZdNfCWvxHFF91U8tjwsogLAOkEY4";
     this.socket = io(socketUrl, {
       auth: {
         token: authToken,
-        // gameId: "SL-VIK",
+        gameId: "SL-GOE",
       },
       reconnectionAttempts: 5,
       reconnectionDelay: 1000, // Initial delay between reconnection attempts (in ms)
@@ -53,17 +82,8 @@ export class SocketManager {
     this.socket.on("connect", () => {
       console.log("Connected to the server");
 
-      this.socket.emit(
-        "AUTH",
-        JSON.stringify({
-          id: "AUTH",
-          Data: {
-            GameID: "SL-VIK",
-          },
-        })
-      );
 
-      this.socket.on("message", (message) => {
+      this.socket.on("message", (message : any) => {
         const data = JSON.parse(message);
         // console.log(`Message ID : ${data.id} |||||| Message Data : ${JSON.stringify(data.message)}`);
         if(data.id == "InitData") {

@@ -47,10 +47,10 @@ export class Lines extends Phaser.GameObjects.Graphics {
         let lastPosY = yOffset * initData.gameData.Lines[index][0];
 
         this.visible = false;
-        const yLineOffset = 50;
+        const yLineOffset = 48;
 
         // Set the initial position of the line
-        this.setPosition(-xOffset * 3, yOffset * initData.gameData.Lines[index][0] - yLineOffset);
+        this.setPosition(-xOffset * 5, yOffset * initData.gameData.Lines[index][0] - yLineOffset);
 
         // Draw the line
         this.lineStyle(10, 0xFFEA31, 1);
@@ -58,12 +58,11 @@ export class Lines extends Phaser.GameObjects.Graphics {
         this.moveTo(lastPosX, lastPosY - yLineOffset);
 
         for (let i = 1; i < initData.gameData.Lines[index].length; i++) {
-            this.lineTo(lastPosX + xOffset * i, yOffset * initData.gameData.Lines[index][i] - yLineOffset);
-            lastPosY = yOffset * initData.gameData.Lines[index][i];
+            this.lineTo(lastPosX + xOffset * i, yOffset * initData.gameData.Lines[index][i] - yLineOffset);          
+            lastPosY = yOffset * initData.gameData.Lines[index][i] - yLineOffset;
+            
         }
         this.strokePath();
-        // console.log(lastPosX, lastPosY, "lastPosXlastPosX");
-        
         // Add this Graphics object to the scene
         scene.add.existing(this);
     }

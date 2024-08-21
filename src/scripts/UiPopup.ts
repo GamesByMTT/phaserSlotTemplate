@@ -8,17 +8,15 @@ export class UiPopups extends Phaser.GameObjects.Container {
     rulesBtn!: InteractiveBtn;
     infoBtn!: InteractiveBtn;
     isOpen: boolean = false;
-
     constructor(scene: Phaser.Scene) {
         super(scene);
         this.setPosition(0, 0);
+        this.ruleBtnInit();
+        this.settingBtnInit();
+        this.infoBtnInit();
+        this.menuBtnInit();
 
-        // this.ruleBtnInit();
-        // this.settingBtnInit();
-        // this.infoBtnInit();
-        // this.menuBtnInit();
-
-        // scene.add.existing(this);
+        scene.add.existing(this);
     }
 
     menuBtnInit() {
@@ -27,25 +25,56 @@ export class UiPopups extends Phaser.GameObjects.Container {
             this.scene.textures.get('MenuBtnH')
         ];
         this.menuBtn = new InteractiveBtn(this.scene, menuBtnTextures, () => {
-            // console.log("called");
             this.openPopUp();
         }, 0, true);
-        this.menuBtn.setPosition(gameConfig.scale.width / 10, gameConfig.scale.height / 4);
+        this.menuBtn.setPosition(this.menuBtn.width, this.menuBtn.height * 0.7 );
         this.add(this.menuBtn);
+    }
+
+    settingBtnInit() {
+        const settingBtnSprites = [
+            this.scene.textures.get('settingBtn'),
+            this.scene.textures.get('settingBtnH')
+        ];
+        this.settingBtn = new InteractiveBtn(this.scene, settingBtnSprites, () => {
+            // setting Button
+        }, 1, false); // Adjusted the position index
+        this.settingBtn.setPosition(this.settingBtn.width, this.settingBtn.height * 0.7);
+        this.add(this.settingBtn);
+    }
+
+    infoBtnInit() {
+        const infoBtnSprites = [
+            this.scene.textures.get('infoBtn'),
+            this.scene.textures.get('infoBtnH'),
+        ];
+        this.infoBtn = new InteractiveBtn(this.scene, infoBtnSprites, () => {
+            // info button 
+        }, 2, false); // Adjusted the position index
+        this.infoBtn.setPosition(this.infoBtn.width, this.infoBtn.height * 0.7);
+        this.add(this.infoBtn);
+    }
+
+    ruleBtnInit() {
+        const rulesBtnSprites = [
+            this.scene.textures.get('rulesBtn'),
+            this.scene.textures.get('rulesBtnH')
+        ];
+        this.rulesBtn = new InteractiveBtn(this.scene, rulesBtnSprites, () => {
+            // rules button
+        }, 3, false); // Adjusted the position index
+        this.rulesBtn.setPosition(this.rulesBtn.width, this.rulesBtn.height * 0.7);
+        this.add(this.rulesBtn);
     }
 
     openPopUp() {
         // Toggle the isOpen boolean
         this.isOpen = !this.isOpen;
-        // console.log(this.isOpen);
         this.menuBtn.setInteractive(false);
-
-        const targetY = gameConfig.scale.width / 10 + this.menuBtn.moveToPosition * this.menuBtn.height;
-
         if (this.isOpen) {
-            this.tweenToPosition(this.rulesBtn, targetY);
-            this.tweenToPosition(this.infoBtn, targetY);
-            this.tweenToPosition(this.settingBtn, targetY);
+            this.tweenToPosition(this.rulesBtn, 3);
+            this.tweenToPosition(this.infoBtn, 2);
+            this.tweenToPosition(this.settingBtn, 1);
         } else {
             this.tweenBack(this.rulesBtn);
             this.tweenBack(this.infoBtn);
@@ -53,14 +82,16 @@ export class UiPopups extends Phaser.GameObjects.Container {
         }
     }
 
-    tweenToPosition(button: InteractiveBtn, targetY: number) {
+    tweenToPosition(button: InteractiveBtn, index: number) {
+
+        const targetY = this.menuBtn.height + index * this.menuBtn.height; // Calculate the Y position with spacing
         button.setVisible(true);
         this.scene.tweens.add({
             targets: button,
             y: targetY,
-            duration: 600,
+            duration: 300,
             ease: 'Elastic',
-            easeParams: [1.1, 0.6],
+            easeParams: [1, 0.9],
             onComplete: () => {
                 button.setInteractive(true);
                 this.menuBtn.setInteractive(true);
@@ -72,53 +103,18 @@ export class UiPopups extends Phaser.GameObjects.Container {
         button.setInteractive(false);
         this.scene.tweens.add({
             targets: button,
-            y: gameConfig.scale.width / 10 + button.height,
-            duration: 600,
+            y: button.height,
+            duration: 100,
             ease: 'Elastic',
-            easeParams: [1.1, 0.6],
+            easeParams: [1, 0.9],
             onComplete: () => {
                 button.setVisible(false);
                 this.menuBtn.setInteractive(true);
             }
         });
     }
-
-    settingBtnInit() {
-        const settingBtnSprites = [
-            this.scene.textures.get('settingBtn'),
-            this.scene.textures.get('settingBtnH')
-        ];
-        this.settingBtn = new InteractiveBtn(this.scene, settingBtnSprites, () => {
-            // console.log("called");
-        }, 2, false);
-        this.settingBtn.setPosition(gameConfig.scale.width / 10, gameConfig.scale.height / 4);
-        this.add(this.settingBtn);
-    }
-
-    ruleBtnInit() {
-        const rulesBtnSprites = [
-            this.scene.textures.get('rulesBtn'),
-            this.scene.textures.get('rulesBtnH')
-        ];
-        this.rulesBtn = new InteractiveBtn(this.scene, rulesBtnSprites, () => {
-            // console.log("called");
-        }, 3, false);
-        this.rulesBtn.setPosition(gameConfig.scale.width / 10, gameConfig.scale.height / 4);
-        this.add(this.rulesBtn);
-    }
-
-    infoBtnInit() {
-        const infoBtnSprites = [
-            this.scene.textures.get('infoBtn'),
-            this.scene.textures.get('infoBtnH'),
-        ];
-        this.infoBtn = new InteractiveBtn(this.scene, infoBtnSprites, () => {
-            // console.log("called");
-        }, 4, false);
-        this.infoBtn.setPosition(gameConfig.scale.width / 10, gameConfig.scale.height / 4);
-        this.add(this.infoBtn);
-    }
 }
+
 
 class InteractiveBtn extends Phaser.GameObjects.Sprite {
     moveToPosition: number = -1;

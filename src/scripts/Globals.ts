@@ -68,7 +68,10 @@ export const ResultData = {
     BonusStopIndex:  -1,
     ResultReel: [[]],
     WinAmout: 0,
-    freeSpins:  0,
+    freeSpins:  {
+      count: 0,
+      isNewAdded: false
+    },
     isBonus:  false,
     jackpot:  0,
     linesToEmit:[],

@@ -22,11 +22,17 @@ export class TextLabel extends GameObjects.Text {
         // Add this text object to the scene
         scene.add.existing(this);
     }
-
+    /**
+     * @method updateLabelText update the text on UI Container
+     * @param text String passed from Mainscene or UiContainer
+     */
     updateLabelText(text: string) {
         this.setText(text);
     }
-
+    /**
+     * @method setTextColor used to add color on textLabel
+     * @param color passed the value from MaineScene or UiContainer
+     */
     setTextColor(color: string) {
         this.setColor(color);
     }
