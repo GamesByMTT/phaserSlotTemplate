@@ -14,8 +14,8 @@ if(!IS_DEV)
     if (event.data.type === "authToken") {
       console.log("event check", event.data);
       const data = { 
-        socketUrl :  event.data.cookie,
-        authToken :  event.data.socketURL
+        socketUrl : event.data.socketURL,
+        authToken :  event.data.cookie
       }
       // Call the provided callback function
       console.log("Got Data From Cookies : ",data);
