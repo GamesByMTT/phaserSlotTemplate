@@ -62,7 +62,7 @@ export default class MainLoader extends Scene {
         this.load.on('complete', () => {
             // Only complete progress after socket initialization
             if (Globals.Socket?.socketLoaded) {
-                this.completeLoading();
+                this.loadScene();
             }
         });
 
@@ -96,15 +96,19 @@ export default class MainLoader extends Scene {
     public  onInitDataReceived() {
         console.log("InitData received");
         // If assets are fully loaded, complete the loading process
-        if (this.load.totalComplete === this.load.totalToLoad) {
-            this.completeLoading();
+        if (this.load.totalComplete === this.load.totalToLoad && Globals.Socket?.socketLoaded) {
             // Proceed with creating the MainScene
-            setTimeout(() => {
-                this.scene.add("MainScene", MainScene, true);
-                this.mainScene = this.scene.get('MainScene') as MainScene;
-                Globals.emitter = new MyEmitter(this.mainScene);
-            }, 500);
+            this.loadScene();
             
         }
+    }
+    public loadScene()
+    {
+        this.completeLoading();
+        setTimeout(() => {
+            this.scene.add("MainScene", MainScene, true);
+            this.mainScene = this.scene.get('MainScene') as MainScene;
+            Globals.emitter = new MyEmitter(this.mainScene);
+        }, 500);
     }
 }
