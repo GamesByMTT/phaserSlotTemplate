@@ -13,15 +13,14 @@ if(!IS_DEV)
     // Check the message type and handle accordingly
     if (event.data.type === "authToken") {
       console.log("event check", event.data);
-      const authToken = event.data.cookie;
-      const socketURL = event.data.socketURL;
-      // Update global variables or pass them to the callback
-      SocketUrl = socketURL;
-      AuthToken = authToken;
+      const data = { 
+        socketUrl :  event.data.cookie,
+        authToken :  event.data.socketURL
+      }
       // Call the provided callback function
-      console.log(socketURL,authToken);
+      console.log("Got Data From Cookies : ",data);
       Globals.Socket = new SocketManager();
-      Globals.Socket.onToken(event.data);
+      Globals.Socket.onToken(data);
     }
   });
 }
