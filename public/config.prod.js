@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
 const webpack = require("webpack");
-const Dotenv = require('dotenv-webpack');
+// const Dotenv = require('dotenv-webpack');
 
 const line = "---------------------------------------------------------";
 const msg = `Gold of Egypt Slot Game`;
@@ -99,6 +99,8 @@ module.exports = {
                 { from: 'public/style.css', to: 'style.css' }
             ],
         }),
-        new Dotenv(),
+        new webpack.DefinePlugin({
+          IS_DEV: JSON.stringify(false),
+        }),
     ]
 };

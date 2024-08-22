@@ -3,8 +3,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
-const Dotenv = require('dotenv-webpack');
-
+const isDev = process.argv.includes('webpack-dev-server') || process.argv.includes('serve');
 module.exports = {
   mode: "development",
   devtool: "eval-source-map",
@@ -80,7 +79,10 @@ module.exports = {
 new HtmlWebpackPlugin({
     template: "./index.html"
 }),
-new Dotenv(),
+new webpack.DefinePlugin({
+  IS_DEV: JSON.stringify(true),
+}),
+
     // new CopyPlugin({
     //   patterns: [
     //     {
