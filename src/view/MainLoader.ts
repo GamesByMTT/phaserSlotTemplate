@@ -9,14 +9,13 @@ export default class MainLoader extends Scene {
     resources: any;
     private progressBar: GameObjects.Graphics | null = null;
     private progressBox: GameObjects.Graphics | null = null;
-    private socketManager: SocketManager | null = null;
     private mainScene!: MainScene;
-    private socketDataReceived: boolean = false;
     private maxProgress: number = 0.7; // Cap progress at 70%
 
     constructor(config: Phaser.Types.Scenes.SettingsConfig) {
         super(config);
         this.resources = LoaderConfig;
+        Globals.MainLoader = this;
     }
 
     preload() {
@@ -62,14 +61,14 @@ export default class MainLoader extends Scene {
 
         this.load.on('complete', () => {
             // Only complete progress after socket initialization
-            if (this.socketDataReceived) {
+            if (Globals.Socket?.socketLoaded) {
                 this.completeLoading();
             }
         });
 
         // Initialize socket and handle completion
         
-        this.initializeSocket();
+        // this.initializeSocket();
     }
 
     private updateProgressBar(value: number) {
@@ -81,13 +80,6 @@ export default class MainLoader extends Scene {
         }
     }
 
-    private initializeSocket() {
-        this.socketManager = new SocketManager(() => {
-            // Callback for when InitData is received
-            this.onInitDataReceived();
-        });
-        Globals.Socket = this.socketManager;
-    }
 
     private completeLoading() {
         if (this.progressBox) {
@@ -101,10 +93,8 @@ export default class MainLoader extends Scene {
         Globals.resources = { ...loadedTextures };
     }
 
-    private onInitDataReceived() {
+    public  onInitDataReceived() {
         console.log("InitData received");
-        this.socketDataReceived = true;
-
         // If assets are fully loaded, complete the loading process
         if (this.load.totalComplete === this.load.totalToLoad) {
             this.completeLoading();

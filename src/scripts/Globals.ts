@@ -1,9 +1,10 @@
-import Phaser from "phaser";
+import Phaser, { Scene } from "phaser";
 import { App } from "./App";
 import Stats from "stats.js"
 import MyEmitter from "./MyEmitter";
 import { Howl } from "howler";
 import { SocketManager } from "../socket";
+import MainLoader from "../view/MainLoader";
 
 type globalDataType = {
   resources: { [key: string]:  Phaser.Textures.Texture }
@@ -11,10 +12,12 @@ type globalDataType = {
   isMobile: boolean;
   fpsStats : Stats ,
   soundResources: { [key: string]: Howl };
+  MainLoader : MainLoader | undefined;
 
   App: App | undefined;
   Socket : SocketManager | undefined,
   PhaserInstance: Phaser.Game | undefined;
+
 }
 
 export const Globals: globalDataType = {
@@ -27,6 +30,7 @@ export const Globals: globalDataType = {
     const device = this.PhaserInstance.device;
     return device.os.android || device.os.iOS;
   },
+  MainLoader : undefined,
   fpsStats: new Stats(),
   App: undefined,
   Socket: undefined,
