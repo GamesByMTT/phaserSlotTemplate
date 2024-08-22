@@ -117,16 +117,4 @@ export default class MainLoader extends Scene {
             
         }
     }
-    // create(){
-    //     console.log("AddEventLitener on MaiLoader File");
-    //     window.addEventListener('message', this.handleMessageEvent.bind(this));
-    // }
-
-    // handleMessageEvent(event: MessageEvent){
-    //     console.log("i am listening this event in MainLoader File Create function", event.data);
-    //     if (event.data.type === 'authToken') {
-    //         console.log('Received customEvent:', event.data);
-    //         this.socketManager?.updateSocketConfig(event.data.socketURL, event.data.cookie)
-    //       }
-    // }
 }
