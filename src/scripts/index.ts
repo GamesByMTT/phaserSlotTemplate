@@ -34,8 +34,7 @@ function loadGame() {
   const game = new Phaser.Game(gameConfig);
   const sceneHandler = new SceneHandler(game);
   Globals.SceneHandler = sceneHandler;  
-  console.log(Globals.SceneHandler, "Globals.SceneHandler in index file");
-  
+  // console.log(Globals.SceneHandler, "Globals.SceneHandler in index file");
 }
 
 if (typeof console !== 'undefined') {

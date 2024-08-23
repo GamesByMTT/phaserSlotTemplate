@@ -86,14 +86,6 @@ export default class MainLoader extends Scene {
         Globals.resources = { ...loadedTextures };
     }
 
-    // public onInitDataReceived() {
-    //     // If assets are fully loaded, complete the loading process
-    //     if (this.load.totalComplete === this.load.totalToLoad && Globals.Socket?.socketLoaded) {
-    //         // Proceed with creating the MainScene
-    //         this.loadScene();
-    //     }
-    // }
-
     public loadScene() {
         this.completeLoading();
         setTimeout(() => {

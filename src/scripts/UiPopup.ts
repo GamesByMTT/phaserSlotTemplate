@@ -33,8 +33,17 @@ export class UiPopups extends Phaser.GameObjects.Container {
     }
     exitButton(){
         const exitButtonSprites = [
-            this.scene.textures.get('exitBtn')
-        ]
+            this.scene.textures.get('exitButton'),
+            this.scene.textures.get('exitButtonPressed')
+        ];
+        console.log(exitButtonSprites, "exitButtonSprites");
+        this.exitBtn = new InteractiveBtn(this.scene, exitButtonSprites, ()=>{
+            this.exitBtn.setTexture("exitButtonPressed");
+            console.log("exit Button Clickd");
+            window.parent.postMessage( "onExit","*");
+        }, 0, true);
+        this.exitBtn.setPosition(gameConfig.scale.width - this.exitBtn.width, this.exitBtn.height * 0.7)
+        this.add(this.exitBtn)
     }
     settingBtnInit() {
         const settingBtnSprites = [

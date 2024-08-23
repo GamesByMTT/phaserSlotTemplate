@@ -12,7 +12,6 @@ export class SocketManager {
   constructor() { 
    
   }
-
   onToken(data : {socketUrl : string, authToken : string})
   {
     try { 
@@ -72,29 +71,6 @@ export class SocketManager {
       console.log(errorMessage);
     });
   }
-
- // Add this method to the SocketManager class in socket.ts
-authenticate(): Promise<void> {
-    return new Promise((resolve, reject) => {
-        this.socket.on("connect", () => {
-            console.log("Connected to the server");
-
-            this.socket.emit(
-                "AUTH",
-                JSON.stringify({
-                    id: "AUTH",
-                    Data: {
-                        GameID: "SL-GF",
-                    },
-                })
-            );
-
-        });
-    });
-}
-  messages(message: any) {
-    // console.log(message, "Scoket message testing");
-  }
   sendMessage(id : string, message: any) {
     console.log(message, "sending message");
     this.socket.emit(
@@ -102,18 +78,5 @@ authenticate(): Promise<void> {
       JSON.stringify({ id: id, data: message })
     );
   }
-  updateSocketConfig(newSocketUrl: string, newAuthToken: string) {
-    console.log("updateSocketConfig to update socket URL");
-    SocketUrl = newSocketUrl;
-    AuthToken = newAuthToken;
-    console.log(this.socket, "this.socket");
-    
-    if (this.socket == undefined) {
-        // this.socket.disconnect();
-        console.log("setupSocket");
-        
-        this.setupSocket(); // Reinitialize the socket with new config
-    }
-}
 }
 

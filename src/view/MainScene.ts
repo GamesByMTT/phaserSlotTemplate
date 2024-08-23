@@ -32,13 +32,18 @@ export default class MainScene extends Scene {
         // Initialize UI Container
         this.uiContainer = new UiContainer(this, () => this.onSpinCallBack());
         this.mainContainer.add(this.uiContainer);
+        
         // Initialize Slots
         this.slot = new Slots(this, this.uiContainer,() => this.onResultCallBack());
         this.mainContainer.add(this.slot);
+
+        // Initialize payLines
         this.lineGenerator = new LineGenerator(this, this.slot.slotSymbols[0][0].symbol.height, this.slot.slotSymbols[0][0].symbol.width);
         this.mainContainer.add(this.lineGenerator);
+
         // Initialize UI Popups
         this.uiPopups = new UiPopups(this);
+        this.mainContainer.add(this.uiPopups)
 
         // for Mobile fullScreen onclick
         if (!this.sys.game.device.os.desktop) {

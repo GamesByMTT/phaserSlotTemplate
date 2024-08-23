@@ -13,7 +13,7 @@ export const LoaderConfig = {
     pBtnH  :  "/src/sprites/ButtonPlusHover.png",
     mBtnH  :  "/src/sprites/ButtonMinusHover.png",
     lines :  "/src/sprites/PanelLines.png",
-    winPanel :  "/src/sprites/PanelWin.png",
+    winPanel :  "/src/sprites/PanelWin.png",    
     balancePanel :  "/src/sprites/PanelBalance.png",
     fireVase :  "/src/sprites/Vase.png",
     PanelJackpot :  "/src/sprites/PanelJackpot.png",
