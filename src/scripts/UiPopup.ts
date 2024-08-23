@@ -7,6 +7,7 @@ export class UiPopups extends Phaser.GameObjects.Container {
     settingBtn!: InteractiveBtn;
     rulesBtn!: InteractiveBtn;
     infoBtn!: InteractiveBtn;
+    exitBtn!: InteractiveBtn
     isOpen: boolean = false;
     constructor(scene: Phaser.Scene) {
         super(scene);
@@ -15,7 +16,7 @@ export class UiPopups extends Phaser.GameObjects.Container {
         this.settingBtnInit();
         this.infoBtnInit();
         this.menuBtnInit();
-
+        this.exitButton();
         scene.add.existing(this);
     }
 
@@ -30,7 +31,11 @@ export class UiPopups extends Phaser.GameObjects.Container {
         this.menuBtn.setPosition(this.menuBtn.width, this.menuBtn.height * 0.7 );
         this.add(this.menuBtn);
     }
-
+    exitButton(){
+        const exitButtonSprites = [
+            this.scene.textures.get('exitBtn')
+        ]
+    }
     settingBtnInit() {
         const settingBtnSprites = [
             this.scene.textures.get('settingBtn'),

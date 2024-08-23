@@ -1,12 +1,13 @@
 import Phaser from "phaser";
-import MainScene from "../view/MainScene";
+import { Globals } from "./Globals";
 export default class MyEmitter {
-    private mainscene : MainScene;
-    constructor(mainscene: MainScene){
-        this.mainscene = mainscene
+    // private mainscene : MainScene;
+    constructor(){
+       
     }
     Call(msgType: string, msgParams = {}) {
-        if (msgType != "timer" && msgType != "turnTimer")
-            this.mainscene.recievedMessage(msgType, msgParams);
+        if (msgType != "timer" && msgType != "turnTimer"){
+            Globals.SceneHandler?.recievedMessage(msgType, msgParams)
+        }
     }
 }

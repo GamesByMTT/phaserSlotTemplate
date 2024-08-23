@@ -25,6 +25,9 @@ export const LoaderConfig = {
     infoBtnH :  "/src/sprites/ButtonInfoHover.png",
     rulesBtn :  "/src/sprites/ButtonRules.png",
     rulesBtnH :  "/src/sprites/ButtonRulesHover.png",
+    exitButton: "src/sprites/ExitButton.png",
+    exitButtonPressed: "src/sprites/ExitButtonHover.png",
+    popupBgimg: "src/sprites/AboutPanel.png",
     
     slots0_0 :  "/src/sprites/Symbols/A/A (1).png",
     slots0_1 :  "/src/sprites/Symbols/A/A (2).png",
@@ -433,7 +436,7 @@ export const LoaderConfig = {
 export const staticData = {
     // logoURL: "https://cccdn.b-cdn.net/1584464368856.png",
     // logoURL:  "/static/logo.png").default,
-    // Background:  "/static/Background.png",
+    Background:  "src/sprites/Background.jpg",
 };
 
 export const fontData = ["Montserrat"];

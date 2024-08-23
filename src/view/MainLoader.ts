@@ -1,27 +1,25 @@
+// MainLoader.ts
+
 import { Scene, GameObjects } from "phaser";
 import MainScene from "./MainScene";
 import { LoaderConfig } from "../scripts/LoaderConfig";
 import { Globals } from "../scripts/Globals";
-import { SocketManager } from "../socket";
-import MyEmitter from "../scripts/MyEmitter";
+import { SceneHandler } from "../scripts/SceneHandler";
 
 export default class MainLoader extends Scene {
     resources: any;
     private progressBar: GameObjects.Graphics | null = null;
     private progressBox: GameObjects.Graphics | null = null;
-    private mainScene!: MainScene;
     private maxProgress: number = 0.7; // Cap progress at 70%
 
     constructor(config: Phaser.Types.Scenes.SettingsConfig) {
         super(config);
         this.resources = LoaderConfig;
-        Globals.MainLoader = this;
     }
 
     preload() {
         // Load the background image first
         this.load.image("Background", "src/sprites/Background.jpg");
-
         // Once the background image is loaded, start loading other assets
         this.load.once('complete', () => {
             this.addBackgroundImage();
@@ -65,10 +63,6 @@ export default class MainLoader extends Scene {
                 this.loadScene();
             }
         });
-
-        // Initialize socket and handle completion
-        
-        // this.initializeSocket();
     }
 
     private updateProgressBar(value: number) {
@@ -79,7 +73,6 @@ export default class MainLoader extends Scene {
             this.progressBar.fillRect(width / 2 - 150, height / 2 + 10, 500 * value, 10);
         }
     }
-
 
     private completeLoading() {
         if (this.progressBox) {
@@ -93,22 +86,21 @@ export default class MainLoader extends Scene {
         Globals.resources = { ...loadedTextures };
     }
 
-    public  onInitDataReceived() {
-        console.log("InitData received");
-        // If assets are fully loaded, complete the loading process
-        if (this.load.totalComplete === this.load.totalToLoad && Globals.Socket?.socketLoaded) {
-            // Proceed with creating the MainScene
-            this.loadScene();
-            
-        }
-    }
-    public loadScene()
-    {
+    // public onInitDataReceived() {
+    //     // If assets are fully loaded, complete the loading process
+    //     if (this.load.totalComplete === this.load.totalToLoad && Globals.Socket?.socketLoaded) {
+    //         // Proceed with creating the MainScene
+    //         this.loadScene();
+    //     }
+    // }
+
+    public loadScene() {
         this.completeLoading();
         setTimeout(() => {
-            this.scene.add("MainScene", MainScene, true);
-            this.mainScene = this.scene.get('MainScene') as MainScene;
-            Globals.emitter = new MyEmitter(this.mainScene);
+            // Use SceneHandler to manage scenes
+            console.log(this.scene, "before MainScene");
+            
+            Globals.SceneHandler?.addScene('MainScene', MainScene, true)
         }, 500);
     }
 }

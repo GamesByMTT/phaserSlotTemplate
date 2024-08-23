@@ -24,7 +24,6 @@ export class UiContainer extends Phaser.GameObjects.Container {
     fireSprite2!: Phaser.GameObjects.Sprite
     betButtonDisable!: Phaser.GameObjects.Container
 
-
     constructor(scene: Scene, spinCallBack: () => void) {
         super(scene);
         scene.add.existing(this); 

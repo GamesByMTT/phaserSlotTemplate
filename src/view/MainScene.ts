@@ -17,7 +17,6 @@ export default class MainScene extends Scene {
     constructor() {
         super({ key: 'MainScene' });
     }
-
     /**
      * @method create method used to create scene and add graphics respective to the x and y coordinates
      */
@@ -30,20 +29,14 @@ export default class MainScene extends Scene {
         // Set up the slot frame
         this.slotFrame = new Phaser.GameObjects.Sprite(this, width / 2, height / 2, 'frame').setOrigin(0.5)
         this.mainContainer.add(this.slotFrame);
-
-        // Initialize Line Generator
-        setTimeout(() => {
-            this.lineGenerator = new LineGenerator(this, this.slot.slotSymbols[0][0].symbol.height, this.slot.slotSymbols[0][0].symbol.width);
-            this.mainContainer.add(this.lineGenerator);
-        }, 2000);
-
         // Initialize UI Container
         this.uiContainer = new UiContainer(this, () => this.onSpinCallBack());
         this.mainContainer.add(this.uiContainer);
         // Initialize Slots
         this.slot = new Slots(this, this.uiContainer,() => this.onResultCallBack());
         this.mainContainer.add(this.slot);
-
+        this.lineGenerator = new LineGenerator(this, this.slot.slotSymbols[0][0].symbol.height, this.slot.slotSymbols[0][0].symbol.width);
+        this.mainContainer.add(this.lineGenerator);
         // Initialize UI Popups
         this.uiPopups = new UiPopups(this);
 

@@ -42,6 +42,6 @@ export class App {
     }
 
     startScene() {
-        this.game.scene.start('MainScene');
+        // this.game.scene.start('MainScene');
     }
 }

@@ -53,7 +53,8 @@ export class SocketManager {
         const data = JSON.parse(message);
         // console.log(`Message ID : ${data.id} |||||| Message Data : ${JSON.stringify(data.message)}`);
         if(data.id == "InitData") {
-            Globals.MainLoader?.onInitDataReceived();
+            // Globals.MainLoader?.onInitDataReceived();
+            // this.onInitDataReceived()
             initData.gameData = data.message.GameData;
             initData.playerData = data.message.PlayerData;
             console.log(data, "initData on Socket File");
