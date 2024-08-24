@@ -45,13 +45,13 @@ export class UiContainer extends Phaser.GameObjects.Container {
     lineBtnInit() { 
         const container = this.scene.add.container(gameConfig.scale.width/8, gameConfig.scale.height - 70);
         const lineText = new TextLabel(this.scene, -20, -70, "LINES", 30, "#3C2625");
-        const linePanel = this.scene.add.sprite(0, 0, "lines").setDepth(4);
+        const linePanel = this.scene.add.sprite(0, 0, "lines").setDepth(0);
         linePanel.setOrigin(0.5);
         linePanel.setPosition(gameConfig.scale.width/9, gameConfig.scale.height - 70);
         container.add(lineText);
         this.CurrentLineText = new TextLabel(this.scene, -20, -18, "20", 40, "#ffffff");
         //Line Count
-        container.add(this.CurrentLineText).setDepth(10)
+        container.add(this.CurrentLineText).setDepth(1)
     }
 
     /**
@@ -151,7 +151,57 @@ export class UiContainer extends Phaser.GameObjects.Container {
                 }
             })
         
-        }).setDepth(2);      
+        }).setDepth(0);      
+    }
+
+
+    /**
+     * @method autoSpinBtnInit 
+     * @param spinCallBack 
+     * @description crete and auto spin button and on that spin button click it change the sprite and called a recursive function and update the balance accroding to that
+     */
+    autoSpinBtnInit(spinCallBack: () => void) {
+        this.autoBetBtn = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "autoSpin");
+        this.autoBetBtn = this.createButton(
+            'autoSpin',
+            gameConfig.scale.width / 2 + this.autoBetBtn.width / 1.7,
+            gameConfig.scale.height - this.autoBetBtn.height / 2,
+            () => {
+                this.scene.tweens.add({
+                    targets: this.autoBetBtn,
+                    scaleX: 1.2,
+                    scaleY: 1.2,
+                    duration: 100,
+                    onComplete: () =>{
+                        this.isAutoSpinning = !this.isAutoSpinning; // Toggle auto-spin state
+                        if (this.isAutoSpinning && currentGameData.currentBalance > 0) {
+                            Globals.Socket?.sendMessage("SPIN", {
+                                currentBet: currentGameData.currentBetIndex,
+                                currentLines : 20
+                            });
+                            currentGameData.currentBalance -= initData.gameData.Bets[currentGameData.currentBetIndex];
+                            this.currentBalanceText.updateLabelText(currentGameData.currentBalance.toFixed(2));
+                            this.autoSpinRec(true)
+                            spinCallBack(); // Callback to indicate the spin has started
+                            // Start the spin recursion
+                            this.startSpinRecursion(spinCallBack);
+                        } else {
+                            // Stop the spin if auto-spin is turned off
+                            this.autoSpinRec(false);
+                        }
+                        this.scene.tweens.add({
+                            targets: this.autoBetBtn,
+                            scaleX: 1,
+                            scaleY: 1,
+                            duration: 100,
+                            onComplete: () => {
+                                // this.spinBtn.setTexture('spinBtn');
+                            }
+                        });
+                    }
+                })
+            }
+        ).setDepth(0);
     }
 
     /**
@@ -196,7 +246,7 @@ export class UiContainer extends Phaser.GameObjects.Container {
                     // 
                 }
             });
-        }).setDepth(8);
+        }).setDepth(1);
    
     }
 
@@ -285,54 +335,7 @@ export class UiContainer extends Phaser.GameObjects.Container {
         const freeSpinCount = new TextLabel(this.scene, freeSpinBg.x, freeSpinBg.y - 17, "Free Spin : ", 35, "#ffffff");
         this.freeSpinText = new TextLabel(this.scene, freeSpinBg.x + 90, freeSpinBg.y - 17, " ", 35, "#ffffff")
     }
-    /**
-     * @method autoSpinBtnInit 
-     * @param spinCallBack 
-     * @description crete and auto spin button and on that spin button click it change the sprite and called a recursive function and update the balance accroding to that
-     */
-    autoSpinBtnInit(spinCallBack: () => void) {
-        this.autoBetBtn = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "autoSpin");
-        this.autoBetBtn = this.createButton(
-            'autoSpin',
-            gameConfig.scale.width / 2 + this.autoBetBtn.width / 1.7,
-            gameConfig.scale.height - this.autoBetBtn.height / 2,
-            () => {
-                this.scene.tweens.add({
-                    targets: this.autoBetBtn,
-                    scaleX: 1.2,
-                    scaleY: 1.2,
-                    duration: 100,
-                    onComplete: () =>{
-                        this.isAutoSpinning = !this.isAutoSpinning; // Toggle auto-spin state
-                        if (this.isAutoSpinning && currentGameData.currentBalance > 0) {
-                            Globals.Socket?.sendMessage("SPIN", {
-                                currentBet: currentGameData.currentBetIndex,
-                                currentLines : 20
-                            });
-                            currentGameData.currentBalance -= initData.gameData.Bets[currentGameData.currentBetIndex];
-                            this.currentBalanceText.updateLabelText(currentGameData.currentBalance.toFixed(2));
-                            this.autoSpinRec(true)
-                            spinCallBack(); // Callback to indicate the spin has started
-                            // Start the spin recursion
-                            this.startSpinRecursion(spinCallBack);
-                        } else {
-                            // Stop the spin if auto-spin is turned off
-                            this.autoSpinRec(false);
-                        }
-                        this.scene.tweens.add({
-                            targets: this.autoBetBtn,
-                            scaleX: 1,
-                            scaleY: 1,
-                            duration: 100,
-                            onComplete: () => {
-                                // this.spinBtn.setTexture('spinBtn');
-                            }
-                        });
-                    }
-                })
-            }
-        ).setDepth(1);
-    }
+    
     
     /**
      * @method startSpinRecursion
