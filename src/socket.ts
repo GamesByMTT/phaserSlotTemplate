@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
 import { Globals, ResultData, initData } from "./scripts/Globals";
+import MainLoader from "./view/MainLoader";
 
 
 // const socketUrl = process.env.SOCKET_URL || ""
@@ -17,7 +18,6 @@ export class SocketManager {
     try { 
       this.SocketUrl = data.socketUrl;
       this.authToken = data.authToken;
-      this.socketLoaded = true;
       this.setupSocket();
     }
     catch(error){
@@ -54,9 +54,11 @@ export class SocketManager {
         if(data.id == "InitData") {
             // Globals.MainLoader?.onInitDataReceived();
             // this.onInitDataReceived()
+            this.socketLoaded = true;
             initData.gameData = data.message.GameData;
             initData.playerData = data.message.PlayerData;
             console.log(data, "initData on Socket File");
+            Globals.SceneHandler?.addScene("MainLoader", MainLoader, true)
         }
         if(data.id == "ResultData"){
               ResultData.gameData = data.message.GameData;

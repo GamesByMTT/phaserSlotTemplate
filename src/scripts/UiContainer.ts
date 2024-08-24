@@ -331,7 +331,7 @@ export class UiContainer extends Phaser.GameObjects.Container {
      * @description this method is used for showing the number of freeSpin value at the top of reels
      */
     freeSpininit(freeSpinNumber: number){
-        console.log("freeSpinNumber", freeSpinNumber);
+        // console.log("freeSpinNumber", freeSpinNumber);
         
         if(freeSpinNumber >= 1){
             const freeSpinContainer = this.scene.add.container(gameConfig.scale.width/2, gameConfig.scale.height*0.15);

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { Globals, ResultData, initData } from "./Globals";
-import { gameConfig } from './appconfig';
+import { gameConfig, maxScaleFactor, minScaleFactor } from './appconfig';
 import { UiContainer } from './UiContainer';
 import { Easing, Tween } from "@tweenjs/tween.js"; // If using TWEEN for animations
 
@@ -140,7 +140,7 @@ export class Slots extends Phaser.GameObjects.Container {
             for (let j = 0; j < this.slotSymbols[i].length; j++) {
                 setTimeout(() => {
                     this.slotSymbols[i][j].endTween();
-                }, 200 * i);
+                }, 100 * i);
             }
         }
         setTimeout(() => {
@@ -155,8 +155,7 @@ export class Slots extends Phaser.GameObjects.Container {
                     this.slotSymbols[i][j].update(delta);
                     if (
                         this.slotSymbols[i][j].symbol.y +
-                            this.slotSymbols[i][j].symbol.displayHeight * 1.5 >=
-                        2000
+                        this.slotSymbols[i][j].symbol.displayHeight * 1.5 >= 2000
                     ) {
                         if (j === 0) {
                             this.slotSymbols[i][j].symbol.y =
@@ -199,7 +198,7 @@ class Symbols {
         this.scene.anims.create({
             key: `${symbolKey}`,
             frames: textures.map((texture) => ({ key: texture })),
-            frameRate: 20,
+            frameRate: 15,
             repeat: -1,
         });        
     }
@@ -224,7 +223,7 @@ class Symbols {
         if (this.index.y < 3) {
             let textureKeys: string[] = [];
             // Retrieve the elementId based on index
-            const elementId = ResultData.gameData.ResultReel[this.index.y][this.index.x];
+                const elementId = ResultData.gameData.ResultReel[this.index.y][this.index.x];
                 for (let i = 0; i < 23; i++) {
                     const textureKey = `slots${elementId}_${i}`;
                     // Check if the texture exists in cache
@@ -238,10 +237,9 @@ class Symbols {
                         this.scene.anims.create({
                             key: `symbol_anim_${elementId}`,
                             frames: textureKeys.map(key => ({ key })),
-                            frameRate: 20,
+                            frameRate: 12,
                             repeat: -1
                         });
-                    // Set the texture to the first key and start the animation
                         this.symbol.setTexture(textureKeys[0]);               
                     }
         }
@@ -254,19 +252,18 @@ class Symbols {
             ease: 'Elastic.easeOut',
             repeat: 0,
             onComplete: () => {
-                // Animation complete callback
+              
             }
         });
     }
     
       update(dt: number) {
-        
         if (this.startMoving) {
-          const deltaY = 10 * dt;
+          const deltaY = 7 * dt;
           const newY = this.symbol.y + deltaY;  
           this.symbol.y = newY;         
         // Check if newY exceeds the maximum value
-        if (newY >= (this.isMobile ? window.innerHeight * 2 : window.innerHeight)) {
+        if (newY >= 1080 ){
             this.symbol.y = 100; // Reset to 0 if it exceeds maxY
         }
     }

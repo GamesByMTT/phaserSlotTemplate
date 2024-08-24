@@ -3,6 +3,7 @@ import { gameConfig, CalculateScaleFactor } from "./appconfig";
 import { Globals } from "./Globals";
 import { SocketManager } from "../socket";
 import { SceneHandler } from "./SceneHandler";
+import MainLoader from "../view/MainLoader";
 
 window.parent.postMessage( "authToken","*");
 
@@ -40,7 +41,7 @@ function loadGame() {
 if (typeof console !== 'undefined') {
   console.warn = () => {};
   console.info = () => {};
-  // console.debug = () => {};
+  console.debug = () => {};
 }
 
 

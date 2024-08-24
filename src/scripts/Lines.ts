@@ -2,8 +2,8 @@ import Phaser from "phaser";
 import { initData } from "./Globals";
 import { gameConfig } from "./appconfig";
 
-let xOffset = -1;
-let yOffset = -1;
+let xOffset = 0.5;
+let yOffset = 0.5;
 
 export class LineGenerator extends Phaser.GameObjects.Container {
     lineArr: Lines[] = [];
@@ -12,7 +12,8 @@ export class LineGenerator extends Phaser.GameObjects.Container {
         super(scene);
         xOffset = xOf;
         yOffset = yOf;
-
+        console.log("lines", xOffset, yOffset, this.scene);
+        
         // Create lines based on initData
         for (let i = 0; i < initData.gameData.Lines.length; i++) {
             let line = new Lines(scene, i);
@@ -20,7 +21,8 @@ export class LineGenerator extends Phaser.GameObjects.Container {
             this.add(line);
             this.lineArr.push(line);
         }
-        this.setPosition(gameConfig.scale.width / 4, gameConfig.scale.height/2);
+        this.setPosition(gameConfig.scale.width / 3.6, gameConfig.scale.height/2);
+        this.setScale(0.9, 0.8);
         // Add this Container to the scene
         scene.add.existing(this);
     }
@@ -32,7 +34,7 @@ export class LineGenerator extends Phaser.GameObjects.Container {
                 this.lineArr[lineIndex].showLine();
             }
         });
-    }
+    } 
 
     hideLines() {
         this.lineArr.forEach(line => line.hideLine());

@@ -1,10 +1,7 @@
-// MainLoader.ts
-
 import { Scene, GameObjects } from "phaser";
 import MainScene from "./MainScene";
 import { LoaderConfig } from "../scripts/LoaderConfig";
 import { Globals } from "../scripts/Globals";
-import { SceneHandler } from "../scripts/SceneHandler";
 
 export default class MainLoader extends Scene {
     resources: any;
@@ -59,9 +56,15 @@ export default class MainLoader extends Scene {
 
         this.load.on('complete', () => {
             // Only complete progress after socket initialization
-            if (Globals.Socket?.socketLoaded) {
-                this.loadScene();
-            }
+    
+                if (Globals.Socket?.socketLoaded) {
+           
+                    console.log(Globals.Socket?.socketLoaded,"Globals.Socket?.socketLoaded");
+               
+                    this.loadScene();
+                }
+
+           
         });
     }
 
@@ -88,11 +91,11 @@ export default class MainLoader extends Scene {
 
     public loadScene() {
         this.completeLoading();
-        setTimeout(() => {
             // Use SceneHandler to manage scenes
-            console.log(this.scene, "before MainScene");
-            
+            if(Globals.SceneHandler?.getScene("MainLoader")){
+                Globals.SceneHandler.removeScene("MainLoader");
+            }
             Globals.SceneHandler?.addScene('MainScene', MainScene, true)
-        }, 500);
+
     }
 }
