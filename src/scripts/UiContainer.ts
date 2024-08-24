@@ -10,12 +10,13 @@ export class UiContainer extends Phaser.GameObjects.Container {
     spinBtn!: Phaser.GameObjects.Sprite;
     maxbetBtn!: Phaser.GameObjects.Sprite;
     autoBetBtn!: Phaser.GameObjects.Sprite;
+    freeSpinBgImg!: Phaser.GameObjects.Sprite
     fireAnimation: Phaser.GameObjects.Sprite[] = [];
     CurrentBetText!: TextLabel;
     currentWiningText!: TextLabel;
     currentBalanceText!: TextLabel;
     CurrentLineText!: TextLabel;
-    freeSpinText!: TextLabel
+    freeSpinText!: TextLabel;
     pBtn!: Phaser.GameObjects.Sprite;
     mBtn!: Phaser.GameObjects.Sprite
     private isAutoSpinning: boolean = false; // Flag to track if auto-spin is active
@@ -329,14 +330,24 @@ export class UiContainer extends Phaser.GameObjects.Container {
      * @method freeSpininit 
      * @description this method is used for showing the number of freeSpin value at the top of reels
      */
-    freeSpininit(){
-        const freeSpinContainer = this.scene.add.container(gameConfig.scale.width/2, gameConfig.scale.height*0.15);
-        const freeSpinBg = this.scene.add.sprite(freeSpinContainer.x, freeSpinContainer.y, "balancePanel");
-        const freeSpinCount = new TextLabel(this.scene, freeSpinBg.x, freeSpinBg.y - 17, "Free Spin : ", 35, "#ffffff");
-        this.freeSpinText = new TextLabel(this.scene, freeSpinBg.x + 90, freeSpinBg.y - 17, " ", 35, "#ffffff")
+    freeSpininit(freeSpinNumber: number){
+        console.log("freeSpinNumber", freeSpinNumber);
+        
+        if(freeSpinNumber >= 1){
+            const freeSpinContainer = this.scene.add.container(gameConfig.scale.width/2, gameConfig.scale.height*0.15);
+            const freeSpinBg = this.scene.add.sprite(freeSpinContainer.x, freeSpinContainer.y, "balancePanel");
+            const freeSpinCount = new TextLabel(this.scene, freeSpinBg.x, freeSpinBg.y - 17, "Free Spin : ", 35, "#ffffff");
+            this.freeSpinText = new TextLabel(this.scene, freeSpinBg.x + 90, freeSpinBg.y - 17, freeSpinNumber.toString(), 35, "#ffffff")
+            this.freeSpinBgImg = freeSpinBg
+        }else{
+            // if(this.freeSpinBgImg){
+            //     this.freeSpinBgImg.setVisible(false)
+            // }
+            // if( this.freeSpinText){
+            //     this.freeSpinText.setVisible(false)
+            // }
+        }
     }
-    
-    
     /**
      * @method startSpinRecursion
      * @param spinCallBack 

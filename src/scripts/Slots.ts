@@ -201,7 +201,7 @@ class Symbols {
             frames: textures.map((texture) => ({ key: texture })),
             frameRate: 20,
             repeat: -1,
-        });
+        });        
     }
     // to update the slotx_0 to show the 0 index image at the end
     updateKeyToZero(symbolKey: string): string {
@@ -264,11 +264,11 @@ class Symbols {
         if (this.startMoving) {
           const deltaY = 10 * dt;
           const newY = this.symbol.y + deltaY;  
-          this.symbol.y = newY; 
+          this.symbol.y = newY;         
         // Check if newY exceeds the maximum value
-        if (newY >= (this.isMobile ? window.innerHeight * 2 : window.innerHeight * 1.2)) {
+        if (newY >= (this.isMobile ? window.innerHeight * 2 : window.innerHeight)) {
             this.symbol.y = 100; // Reset to 0 if it exceeds maxY
-        } 
+        }
     }
 }
 }

@@ -3,6 +3,7 @@ import { Globals, TextStyle } from "./Globals";
 import { gameConfig } from "./appconfig";
 import { TextLabel } from "./TextLabel";
 import { UiContainer } from "./UiContainer";
+import MainLoader from "../view/MainLoader";
 
 export class UiPopups extends Phaser.GameObjects.Container {
     UiContainer: UiContainer
@@ -130,7 +131,10 @@ export class UiPopups extends Phaser.GameObjects.Container {
             }
         });
     }
-
+    /**
+     * @method openLogoutPopup
+     * @description creating an container for exitPopup 
+     */
     openLogoutPopup() {
         // Create a semi-transparent background for the popup
         const blurGraphic = this.scene.add.graphics().setDepth(1); // Set depth lower than popup elements
@@ -176,17 +180,13 @@ export class UiPopups extends Phaser.GameObjects.Container {
        
         this.yesBtn.setPosition(-130, 80);
         this.noBtn.setPosition(130, 80);
-    
         // Button labels
         const noText = new TextLabel(this.scene, 130, 65, "No", 30, "#ffffff");
         const yesText = new TextLabel(this.scene, -130, 65, "Yes", 30, "#ffffff");
-    
         // Add all elements to popupContainer
         popupContainer.add([popupBg, popupText, this.yesBtn, this.noBtn, yesText, noText]);
-        
-        
         // Add popupContainer to the scene
-        this.scene.add.existing(popupContainer);
+        this.scene.add.existing(popupContainer);       
     }
     
     buttonInteraction(press: boolean){

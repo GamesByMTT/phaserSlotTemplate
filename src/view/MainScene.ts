@@ -46,18 +46,18 @@ export default class MainScene extends Scene {
         this.mainContainer.add(this.uiPopups)
 
         // for Mobile fullScreen onclick
-        if (!this.sys.game.device.os.desktop) {
-            // Add event listener for click or touch to trigger fullscreen
-            this.input.on('pointerdown', async () => {
-                if (!this.scale.isFullscreen) {
-                    try {
-                        await this.scale.startFullscreen();
-                    } catch (error) {
-                        console.error('Failed to enter fullscreen mode:', error);
-                    }
-                }
-            });
-        }    
+        // if (this.sys.game.device.os.android) {
+        //     // Add event listener for click or touch to trigger fullscreen
+        //     this.input.on('pointerdown', async () => {
+        //         if (!this.scale.isFullscreen) {
+        //             try {
+        //                 await this.scale.startFullscreen();
+        //             } catch (error) {
+        //                 console.error('Failed to enter fullscreen mode:', error);
+        //             }
+        //         }
+        //     });
+        // }    
     }
 
     update(time: number, delta: number) {
@@ -96,8 +96,8 @@ export default class MainScene extends Scene {
                 this.uiContainer.currentBalanceText.updateLabelText(currentGameData.currentBalance.toFixed(2));
                 const freeSpinCount = ResultData.gameData.freeSpins.count;
                 // Check if freeSpinCount is greater than 1
-                if (freeSpinCount > 1) {
-                    this.uiContainer.freeSpininit()
+                if (freeSpinCount >= 1) {
+                    this.uiContainer.freeSpininit(freeSpinCount)
                     // Update the label text
                     this.uiContainer.freeSpinText.updateLabelText(freeSpinCount.toString());
                     // Define the tween animation for Scaling
@@ -112,7 +112,7 @@ export default class MainScene extends Scene {
                     });
                 } else {
                     // If count is 1 or less, ensure text is scaled normally
-                    // this.uiContainer.freeSpinText.setScale(1, 1);
+                    this.uiContainer.freeSpininit(freeSpinCount)
                 }
                 this.slot.stopTween();
             });
