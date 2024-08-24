@@ -2,8 +2,10 @@ import Phaser from "phaser";
 import { Globals, TextStyle } from "./Globals";
 import { gameConfig } from "./appconfig";
 import { TextLabel } from "./TextLabel";
+import { UiContainer } from "./UiContainer";
 
 export class UiPopups extends Phaser.GameObjects.Container {
+    UiContainer: UiContainer
     menuBtn!: InteractiveBtn;
     settingBtn!: InteractiveBtn;
     rulesBtn!: InteractiveBtn;
@@ -12,7 +14,7 @@ export class UiPopups extends Phaser.GameObjects.Container {
     yesBtn!: InteractiveBtn;
     noBtn!: InteractiveBtn
     isOpen: boolean = false;
-    constructor(scene: Phaser.Scene) {
+    constructor(scene: Phaser.Scene, uiContainer: UiContainer) {
         super(scene);
         this.setPosition(0, 0);
         this.ruleBtnInit();
@@ -20,6 +22,7 @@ export class UiPopups extends Phaser.GameObjects.Container {
         this.infoBtnInit();
         this.menuBtnInit();
         this.exitButton();
+        this.UiContainer = uiContainer
         scene.add.existing(this);
     }
 
@@ -39,12 +42,10 @@ export class UiPopups extends Phaser.GameObjects.Container {
             this.scene.textures.get('exitButton'),
             this.scene.textures.get('exitButtonPressed')
         ];
-        console.log(exitButtonSprites, "exitButtonSprites");
         this.exitBtn = new InteractiveBtn(this.scene, exitButtonSprites, ()=>{
-            this.exitBtn.setTexture("exitButtonPressed");
+            // this.exitBtn.setTexture("exitButtonPressed");
+            this.UiContainer.onSpin(true);
             this.openLogoutPopup();
-            // window.parent.postMessage( "onExit","*");
-            // Globals.Socket?.sendMessage("EXIT",{});
         }, 0, true, );
         this.exitBtn.setPosition(gameConfig.scale.width - this.exitBtn.width, this.exitBtn.height * 0.7)
         this.add(this.exitBtn)
@@ -102,8 +103,7 @@ export class UiPopups extends Phaser.GameObjects.Container {
     }
 
     tweenToPosition(button: InteractiveBtn, index: number) {
-
-        const targetY = this.menuBtn.height + index * this.menuBtn.height; // Calculate the Y position with spacing
+        const targetY = button.height/1.3 + index * this.menuBtn.height; // Calculate the Y position with spacing
         button.setVisible(true);
         this.scene.tweens.add({
             targets: button,
@@ -117,7 +117,6 @@ export class UiPopups extends Phaser.GameObjects.Container {
             }
         });
     }
-
     tweenBack(button: InteractiveBtn) {
         button.setInteractive(false);
         this.scene.tweens.add({
@@ -150,13 +149,15 @@ export class UiPopups extends Phaser.GameObjects.Container {
         popupBg.setAlpha(1); // Optional: Set background transparency
     
         // Add text to the popup
-        const popupText = new TextLabel(this.scene, 0, -45, "Are you sure you want to exit?", 35, "#3C2625");
+        const popupText = new TextLabel(this.scene, 0, -45, "Are you sure you \n want to exit?", 35, "#3C2625");
         this.yesBtn = new InteractiveBtn(this.scene, logoutButtonSprite, ()=>{
-            window.parent.postMessage( "onExit","*");
+            this.UiContainer.onSpin(false);
             Globals.Socket?.sendMessage("EXIT",{});
+            window.parent.postMessage( "onExit","*");
             popupContainer.destroy();
         }, 0, true)
         this.noBtn = new InteractiveBtn(this.scene, logoutButtonSprite, ()=>{
+            this.UiContainer.onSpin(false);
             popupContainer.destroy()
         }, 0, true)
         this.yesBtn.setPosition(-130, 80);
@@ -174,28 +175,31 @@ export class UiPopups extends Phaser.GameObjects.Container {
     
 }
 
-
 class InteractiveBtn extends Phaser.GameObjects.Sprite {
     moveToPosition: number = -1;
+    defaultTexture!: Phaser.Textures.Texture;
+    hoverTexture!: Phaser.Textures.Texture
 
     constructor(scene: Phaser.Scene, textures: Phaser.Textures.Texture[], callback: () => void, endPos: number, visible: boolean) {
         super(scene, 0, 0, textures[0].key); // Use texture key
-
+        this.defaultTexture = textures[0];
+        this.hoverTexture = textures[1];        
         this.setOrigin(0.5);
         this.setInteractive();
         this.setVisible(visible);
         this.moveToPosition = endPos;
         this.on('pointerdown', () => {
+            this.setTexture(this.hoverTexture.key)
             this.setFrame(1);
             callback();
         });
         this.on('pointerup', () => {
+            this.setTexture(this.defaultTexture.key)
             this.setFrame(0);
         });
         this.on('pointerout', () => {
             this.setFrame(0);
         });
-
         // Set up animations if necessary
         this.anims.create({
             key: 'hover',

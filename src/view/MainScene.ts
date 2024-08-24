@@ -42,7 +42,7 @@ export default class MainScene extends Scene {
         this.mainContainer.add(this.lineGenerator);
 
         // Initialize UI Popups
-        this.uiPopups = new UiPopups(this);
+        this.uiPopups = new UiPopups(this, this.uiContainer);
         this.mainContainer.add(this.uiPopups)
 
         // for Mobile fullScreen onclick
