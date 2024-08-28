@@ -164,7 +164,7 @@ export class UiPopups extends Phaser.GameObjects.Container {
         ];
         this.yesBtn = new InteractiveBtn(this.scene, logoutButtonSprite, () => {
             this.UiContainer.onSpin(false);
-            Globals.Socket?.sendMessage("EXIT", {});
+            Globals.Socket?.socket.emit("EXIT", {});
             window.parent.postMessage("onExit", "*");
             popupContainer.destroy();
             blurGraphic.destroy(); // Destroy blurGraphic when popup is closed

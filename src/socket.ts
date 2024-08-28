@@ -5,7 +5,7 @@ import MainLoader from "./view/MainLoader";
 
 // const socketUrl = process.env.SOCKET_URL || ""
 export class SocketManager {
-  private socket : any;
+  public socket : any;
   public authToken : string = "";
   public SocketUrl : string= "";
   public socketLoaded : boolean = false;
